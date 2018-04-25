@@ -1,0 +1,5 @@
+#vim swap file
+*.sw[op]
+
+# Don't track the database directory
+/db/

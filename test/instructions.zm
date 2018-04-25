@@ -1,0 +1,6 @@
+
+const string    PRE_PRAC_INSTRUCTION    = 
+   M"<b>Dear participant,</b>\n\n"
+    "You are about to start with the practice phase of the experiment.\n"
+    "You'll see two sentences, read them and press a button"
+    ;

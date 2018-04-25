@@ -1,0 +1,37 @@
+
+import instructions;
+
+Block test
+{
+    on_event:entry()
+    {
+//        if (shuffle_items() != OK)
+//            terminate "Unable to shuffle test items.";
+    }
+
+    Part
+    {
+        on_event:entry()
+        {
+            blank_page.action_auto(this, 500ms);
+            control.button_box.enable_all_buttons(CONTINUE);
+        }
+    }
+
+
+    Part instructions
+    {
+        on_event:entry()
+        {
+            pause_page.set_text(PRE_PRAC_INSTRUCTION, true);
+
+            pause_page.action(this);
+            control.button_box.enable_all_buttons(CONTINUE);
+        }
+    }
+}
+
+void action(Part caller)
+{
+    test.enter(caller);
+}
