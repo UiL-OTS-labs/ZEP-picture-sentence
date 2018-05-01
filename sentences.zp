@@ -23,8 +23,11 @@ Experiment experiment
 
     on_event:entry()
     {
-
-        control.button_box.open();
+        if (!control.button_box.is_open) {
+            print_error("Warning running the experiment without an opened "
+                "BeexyBox\n"
+                );
+        }
         show_test_windows();
     }
 
