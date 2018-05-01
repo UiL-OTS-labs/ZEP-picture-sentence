@@ -1,6 +1,7 @@
 
 requires 1.16;
 
+
 import std_windows1;
 import std_texts_nl;
 
@@ -14,6 +15,8 @@ import response_box;
 import output;
 
 import test::task;
+import test::stimuli;
+import test::shuffle;
 
 Experiment experiment
 {
