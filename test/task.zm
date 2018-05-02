@@ -7,8 +7,9 @@ Block task
 {
     on_event:entry()
     {
-        if (shuffle_stimuli() != OK)
-            terminate "Unable to shuffle test items.";
+        // Shuffling happens in modules/session.zm
+//        if (shuffle_stimuli() != OK)
+//            terminate "Unable to shuffle test items.";
     }
 
     Part
