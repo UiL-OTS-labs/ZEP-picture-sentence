@@ -1,6 +1,175 @@
 
+import defs;
+
+
 // The test page of the trial. Initially two sentences will be visible
 Page test_page {
+
+    TestItem item;  // Trial parameters
+
+    init()
+    {
+        fill_pattern_color = TEST_PAGE_COLOR;
+    }
+
+    // Enable to respond using the keyboard
+    on_event:key_press()
+    {
+    }
+
+    // Enable to respond via the BeexyBox
+    on_event:message()
+    {
+    }
+
+    VerticalLayout layout
+    {
+        on_event:init()
+        {
+            spacing = 10;
+            height = 0;     // 0 means as big as possible
+            is_visible = true;
+            top_margin = 100;
+            bottom_margin = 100;
+            //options = LAYOUT_SHRINK_ITEMS_VER; 
+        }
+
+        HorGridLayout pictures
+        {
+            on_event:init()
+            {
+                hor_spacing = 40;
+                ver_spacing = 40;
+                width = 0;     // 0 means as big as possible
+                wrap_count = 2;
+                options = LAYOUT_SHRINK_ITEMS;
+            }
+
+            CanvasGadget pic1
+            {
+                on_event:init()
+                {
+                    fill_pattern_color = TEST_PAGE_STIMULUS_COLOR;
+                    size = 300,300;
+                }
+            }
+            
+            CanvasGadget pic2
+            {
+                on_event:init()
+                {
+                    fill_pattern_color = TEST_PAGE_STIMULUS_COLOR;
+                    size = 300,300;
+                }
+            }
+
+            LabelGadget label1
+            {
+                on_event:init()
+                {
+                    text = "A";
+                    font_family = TEST_PAGE_LABEL_FONT_FAMILY;
+                    font_size = TEST_PAGE_LABEL_FONT_SIZE;
+                }
+            }
+
+            LabelGadget label2
+            {
+                on_event:init()
+                {
+                    text = "B";
+                    font_family = TEST_PAGE_LABEL_FONT_FAMILY;
+                    font_size = TEST_PAGE_LABEL_FONT_SIZE;
+                }
+            }
+        }
+        
+        Spacer {}
+
+        CanvasGadget s1
+        {
+            on_event:init()
+            {
+                fill_pattern_color = TEST_PAGE_STIMULUS_COLOR;
+                size = 1000,100;
+            }
+        }
+
+        HorizontalLayout buttons_s1
+        {
+            on_event:init()
+            {
+                spacing = 300;
+                width = 0;     // 0 means as big as possible
+//                options = LAYOUT_STRETCH_ITEMS;
+            }
+
+            ButtonGadget button_a
+            {
+                on_event:init()
+                {
+                    text = "A";
+                    font_family = TEST_PAGE_BUTTON_FONT_FAMILY;
+                    font_size = TEST_PAGE_BUTTON_FONT_SIZE;
+                    width = 100;
+                }
+            }
+            
+            ButtonGadget button_b
+            {
+                on_event:init()
+                {
+                    text = "B";
+                    font_family = TEST_PAGE_BUTTON_FONT_FAMILY;
+                    font_size = TEST_PAGE_BUTTON_FONT_SIZE;
+                    width = 100;
+                }
+            }
+        }
+
+        Spacer {}
+
+        CanvasGadget s2
+        {
+            on_event:init()
+            {
+                fill_pattern_color = TEST_PAGE_STIMULUS_COLOR;
+                size = 1000,100;
+            }
+        }
+
+        HorizontalLayout buttons_s2
+        {
+            on_event:init()
+            {
+                spacing = 300;
+                width = 0;     // 0 means as big as possible
+                //options = LAYOUT_SPREAD_ITEMS;
+            }
+            
+            ButtonGadget button_a
+            {
+                on_event:init()
+                {
+                    text = "A";
+                    font_family = TEST_PAGE_BUTTON_FONT_FAMILY;
+                    font_size = TEST_PAGE_BUTTON_FONT_SIZE;
+                    width = 100;
+                }
+            }
+            
+            ButtonGadget button_b
+            {
+                on_event:init()
+                {
+                    text = "B";
+                    font_family = TEST_PAGE_BUTTON_FONT_FAMILY;
+                    font_size = TEST_PAGE_BUTTON_FONT_SIZE;
+                    width = 100;
+                }
+            }
+        }
+    }
 
     void setup(int ntrials = -1, bool pr=false, string prompt="")
     {
@@ -18,7 +187,8 @@ Page test_page {
         // Enable button_box
         control.target = this;
 
-        // Enable buttons.
+        // Enable buttons codes.
+        print_error("Enable the right button codes...\n");
     }
 
     void cleanup()
@@ -28,6 +198,18 @@ Page test_page {
 
     void action(Object caller, TestItem item, time reftime, int cycle)
     {
+        time tref;
+        this.item = item;
+
+        tref = test_window1.show_test_page(this, tref + INTER_TRIAL_INTERVAL);
+
+        test_page_overlay.update_progress_bar(cycle);
+
+        control.set_status(
+            string(cycle)   + "  " +
+            string(item.id) + "  "
+            );
+
     }
     
     void action_answer(Object caller, TestItem item, time reftime, int cycle)
