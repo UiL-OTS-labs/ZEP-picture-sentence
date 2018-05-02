@@ -1,0 +1,37 @@
+
+// The test page of the trial. Initially two sentences will be visible
+Page test_page {
+
+    void setup(int ntrials = -1, bool pr=false, string prompt="")
+    {
+        test_page_overlay.setup(this);
+
+        // Show or hide prompt.
+        if (pr)
+            test_page_overlay.show_prompt(prompt);
+        else
+            test_page_overlay.show_prompt("");
+
+        // Enable or disable the progress bar or disable when ntrials < 0        
+        test_page_overlay.show_progress_bar(ntrials);
+
+        // Enable button_box
+        control.target = this;
+
+        // Enable buttons.
+    }
+
+    void cleanup()
+    {
+        test_page_overlay.cleanup();
+    }
+
+    void action(Object caller, TestItem item, time reftime, int cycle)
+    {
+    }
+    
+    void action_answer(Object caller, TestItem item, time reftime, int cycle)
+    {
+    }
+
+};

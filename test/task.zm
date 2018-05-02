@@ -1,7 +1,9 @@
 
 import instructions;
+import output;
+import test_page;
 
-Block test
+Block task 
 {
     on_event:entry()
     {
@@ -39,6 +41,67 @@ Block test
         }
     }
 
+    Block practice
+    {
+        on_event:entry()
+        {
+            num_cycles = prac_items.size;
+            test_page.setup(num_cycles, true);
+        }
+        
+        on_event:exit()
+        {
+            test_page.cleanup();
+            // prac_output_save();
+        }
+
+        Trial trial
+        {
+            TestItem item;
+
+            on_event:entry()
+            {
+                item = prac_items[practice.cycle];
+            }
+
+            on_event:exit()
+            {
+                TestOutput output;
+                test_output_append(prac_output, output);
+            }
+
+            SubTrial reading
+            {
+                on_event:entry()
+                {
+                    test_page.action(this, item, reference_time, test.cycle);
+                }
+            }
+
+            SubTrial answer
+            {
+                on_event:entry()
+                {
+                    test_page.action_answer(
+                        this,
+                        item,
+                        reference_time,
+                        test.cycle
+                        );
+                }
+            }
+        }
+    }
+    
+    Part
+    {
+        on_event:entry()
+        {
+            blank_page.action_auto(this, 500ms);
+            control.button_box.enable_all_buttons(CONTINUE);
+        }
+    }
+
     Part test_instruction
     {
         on_event:entry()
@@ -49,10 +112,70 @@ Block test
             control.button_box.enable_all_buttons(CONTINUE);
         }
     }
+    
+    Part
+    {
+        on_event:entry()
+        {
+            blank_page.action_auto(this, 500ms);
+            control.button_box.enable_all_buttons(CONTINUE);
+        }
+    }
 
+    Block test
+    {
+        on_event:entry()
+        {
+            num_cycles = test_items.size;
+            test_page.setup(num_cycles, true);
+        }
+
+        on_event:exit()
+        {
+            test_page.cleanup();
+            test_output_save();
+        }
+
+        Trial trial
+        {
+            TestItem item;
+
+            on_event:entry()
+            {
+                item = test_items[test.cycle];
+            }
+
+            on_event:exit()
+            {
+                TestOutput output;
+                test_output_append(test_output, output);
+            }
+
+            SubTrial reading
+            {
+                on_event:entry()
+                {
+                    test_page.action(this, item, reference_time, test.cycle);
+                }
+            }
+
+            SubTrial answer
+            {
+                on_event:entry()
+                {
+                    test_page.action_answer(
+                        this,
+                        item,
+                        reference_time,
+                        test.cycle
+                        );
+                }
+            }
+        }
+    }
 }
 
 void action(Part caller)
 {
-    test.enter(caller);
+    task.enter(caller);
 }

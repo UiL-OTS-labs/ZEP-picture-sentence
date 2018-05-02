@@ -1,0 +1,45 @@
+
+// Describes the output of each trial in the experiment.
+record TestOutput {
+    int     reading_time;
+    string  fn1;
+    string  fn2;
+    string  s1;
+    string  s2;
+    string  s1_resp;
+    string  s2_resp;
+    bool    correct;
+    int     response_time;
+};
+
+// Output of the practice phase
+TestOutput[..]  prac_output;
+// Output of the test phase
+TestOutput[..]  test_output;
+
+// Increases the size of the array by one and put the new value there.
+void test_output_append(TestOutput[] array, TestOutput output)
+{
+    array.size = array.size + 1;
+    array[array.size - 1] = output;
+}
+
+// save the practise output
+void prac_output_save()
+{
+    // Append table to CSV file (create if non-existent). The filename format
+    // is: <dbname>/<dbnum>/<expname>/<phasename>/ses<sesid>-<tblnum>.csv
+    string fn = expdb.experiment.session.create_table("practice", 1);
+    prac_output.append(fn, namespace_name + ": prac results");
+    prac_output.size = 0;
+}
+
+// save the test output
+void test_output_save()
+{
+    // Append table to CSV file (create if non-existent). The filename format
+    // is: <dbname>/<dbnum>/<expname>/<phasename>/ses<sesid>-<tblnum>.csv
+    string fn = expdb.experiment.session.create_table(namespace_name, 2);
+    test_output.append(fn, namespace_name + ": test results");
+    test_output.size = 0;
+}
