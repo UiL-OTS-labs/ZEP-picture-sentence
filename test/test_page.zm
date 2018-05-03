@@ -1,6 +1,7 @@
 
 import defs;
 
+const int LINE_WIDTH = 1000;
 
 // The test page of the trial. Initially two sentences will be visible
 Page test_page {
@@ -91,7 +92,27 @@ Page test_page {
             on_event:init()
             {
                 fill_pattern_color = TEST_PAGE_STIMULUS_COLOR;
-                size = 1000,100;
+                size = LINE_WIDTH,100;
+                is_visible = true;
+            }
+
+            TextShape text
+            {
+                on_event:init()
+                {
+//                    size                = LINE_WIDTH,100;
+                    font_family         = TEST_PAGE_STIMULUS_FONT_FAMILY;
+                    font_size           = TEST_PAGE_STIMULUS_FONT_SIZE;
+                    line_pattern_color  = TEST_PAGE_STIMULUS_TEXT_COLOR;
+                    line_width          = LINE_WIDTH;
+                }
+            }
+
+            time enable_sentence(string s, time t, dur d=-1ms)
+            {
+                text.text = s;
+                text.start(t, d);
+                return text.expected_start_time;
             }
         }
 
@@ -133,8 +154,27 @@ Page test_page {
         {
             on_event:init()
             {
-                fill_pattern_color = TEST_PAGE_STIMULUS_COLOR;
-                size = 1000,100;
+                fill_pattern_color  = TEST_PAGE_STIMULUS_COLOR;
+                size = LINE_WIDTH,100;
+            }
+            
+            TextShape text
+            {
+                on_event:init()
+                {
+//                    size = LINE_WIDTH,100;
+                    font_family         = TEST_PAGE_STIMULUS_FONT_FAMILY;
+                    font_size           = TEST_PAGE_STIMULUS_FONT_SIZE;
+                    line_pattern_color  = TEST_PAGE_STIMULUS_TEXT_COLOR;
+                    line_width          = LINE_WIDTH;
+                }
+            }
+            
+            time enable_sentence(string s, time t, dur d=-1ms)
+            {
+                text.text = s;
+                text.start(t, d);
+                return text.expected_start_time;
             }
         }
 
@@ -169,6 +209,12 @@ Page test_page {
                 }
             }
         }
+
+        void enable_sentences(string s1, string s2, time onset)
+        {
+            layout.s1.enable_sentence(s1, onset);
+            layout.s2.enable_sentence(s2, onset);
+        }
     }
 
     void setup(int ntrials = -1, bool pr=false, string prompt="")
@@ -202,6 +248,8 @@ Page test_page {
         this.item = item;
 
         tref = test_window1.show_test_page(this, tref + INTER_TRIAL_INTERVAL);
+
+        layout.enable_sentences(item.s1, item.s2, tref);
 
         test_page_overlay.update_progress_bar(cycle);
 
