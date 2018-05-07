@@ -49,6 +49,7 @@ Experiment experiment
         {
             entry_page.set_text(WELCOME_TEXT);
             entry_page.action(this, 0s);
+            control.button_box.enable_all_buttons(CONTINUE);
         }
     }
 
