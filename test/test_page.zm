@@ -3,10 +3,16 @@ import defs;
 
 const int LINE_WIDTH = 1000;
 
+enum TrialPhase {
+    PHASE_SENTENCES,
+    PHASE_PICTURES
+}
+
 // The test page of the trial. Initially two sentences will be visible
 Page test_page {
 
-    TestItem item;  // Trial parameters
+    TestItem    item;  // Trial parameters
+    TrialPhase  phase; // Indicates where we are in a trial.
 
     init()
     {
@@ -16,22 +22,63 @@ Page test_page {
     // Enable to respond using the keyboard
     on_event:key_press()
     {
+        println("in key_press");
+        if (phase == PHASE_SENTENCES)
+        {
+            if (input_key == ' ' || input_key == KEY_Return)
+                done(CONTINUE);
+        }
+        else if (phase == PHASE_PICTURES)
+        {
+            // Enable buttons to respond here
+            if (input_key == ' ')
+                if (response.has_responded())
+                    done(CONTINUE);
+            else if (input_key == 'a' || input_key == 'A')
+                response.process_hit(event_time, 0);
+            else if (input_key == 'z' || input_key == 'Z')
+                response.process_hit(event_time, 1);
+            else if (input_key == 'm' || input_key == 'M')
+                response.process_hit(event_time, 2);
+            else if (input_key == 'k' || input_key == 'K')
+                response.process_hit(event_time, 3);
+        }
     }
 
     // Enable to respond via the BeexyBox
     on_event:message()
     {
+        println("in message: phase = " + phase);
+        if (phase == PHASE_SENTENCES)
+        {
+            done(CONTINUE);
+        }
+        else if (phase == PHASE_PICTURES)
+        {
+            // Enable buttons to respond here
+            if (input_key == ' ')
+                if (response.has_responded())
+                    done(CONTINUE);
+            else if (input_key == 'a' || input_key == 'A')
+                response.process_hit(event_time, 0);
+            else if (input_key == 'z' || input_key == 'Z')
+                response.process_hit(event_time, 1);
+            else if (input_key == 'm' || input_key == 'M')
+                response.process_hit(event_time, 2);
+            else if (input_key == 'k' || input_key == 'K')
+                response.process_hit(event_time, 3);
+        }
     }
 
     VerticalLayout layout
     {
         on_event:init()
         {
-            spacing = 10;
-            height = 0;     // 0 means as big as possible
-            is_visible = true;
-            top_margin = 100;
-            bottom_margin = 100;
+            spacing         = 10;
+            height          = 0;     // 0 means as big as possible
+            is_visible      = true;
+            top_margin      = 100;
+            bottom_margin   = 100;
             //options = LAYOUT_SHRINK_ITEMS_VER; 
         }
 
@@ -41,9 +88,9 @@ Page test_page {
             {
                 hor_spacing = 40;
                 ver_spacing = 40;
-                width = 0;     // 0 means as big as possible
-                wrap_count = 2;
-                options = LAYOUT_SHRINK_ITEMS;
+                width       = 0;     // 0 means as big as possible
+                wrap_count  = 2;
+                options     = LAYOUT_SHRINK_ITEMS;
             }
 
             CanvasGadget pic1
@@ -53,6 +100,10 @@ Page test_page {
                     fill_pattern_color = TEST_PAGE_STIMULUS_COLOR;
                     size = 300,300;
                 }
+
+                ImageShape im
+                {
+                }
             }
             
             CanvasGadget pic2
@@ -61,6 +112,10 @@ Page test_page {
                 {
                     fill_pattern_color = TEST_PAGE_STIMULUS_COLOR;
                     size = 300,300;
+                }
+
+                ImageShape im
+                {
                 }
             }
 
@@ -82,6 +137,24 @@ Page test_page {
                     font_family = TEST_PAGE_LABEL_FONT_FAMILY;
                     font_size = TEST_PAGE_LABEL_FONT_SIZE;
                 }
+            }
+
+            time display_pictures (string fn1, string fn2, time t)
+            {
+                pic1.im.image = stimuli_dir() + "pictures/" + fn1 + ".png";
+                pic2.im.image = stimuli_dir() + "pictures/" + fn2 + ".png";
+
+                pic1.im.start(t);
+                pic2.im.start(t);
+
+                return pic2.im.expected_start_time;
+            }
+
+            void clear()
+            {
+                is_visible = false;
+                pic1.im.abort();
+                pic2.im.abort();
             }
         }
         
@@ -113,6 +186,11 @@ Page test_page {
                 text.text = s;
                 text.start(t, d);
                 return text.expected_start_time;
+            }
+
+            void clear()
+            {
+                text.abort();
             }
         }
 
@@ -146,6 +224,11 @@ Page test_page {
                     width = 100;
                 }
             }
+
+            void clear()
+            {
+                is_visible = false;
+            }
         }
 
         Spacer {}
@@ -176,6 +259,12 @@ Page test_page {
                 text.start(t, d);
                 return text.expected_start_time;
             }
+            
+            void clear()
+            {
+                text.abort();
+            }
+            
         }
 
         HorizontalLayout buttons_s2
@@ -208,15 +297,89 @@ Page test_page {
                     width = 100;
                 }
             }
+
+            void clear()
+            {
+                is_visible = false;
+            }
         }
 
-        void enable_sentences(string s1, string s2, time onset)
+        time enable_sentences(string s1, string s2, time onset)
         {
-            layout.s1.enable_sentence(s1, onset);
+            time t = layout.s1.enable_sentence(s1, onset);
             layout.s2.enable_sentence(s2, onset);
+
+            layout.pictures.is_visible      = false;
+            layout.buttons_s1.is_visible    = false;
+            layout.buttons_s2.is_visible    = false;
+
+            return t;
+        }
+
+        time enable_pictures(string fn1, string fn2, time onset)
+        {
+            layout.pictures.is_visible      = true;
+            layout.buttons_s1.is_visible    = true;
+            layout.buttons_s2.is_visible    = true;
+
+            return layout.pictures.display_pictures(fn1, fn2, onset);
+        }
+
+        void reset()
+        {
+            pictures.clear();
+            s1.abort();
+            buttons_s1.clear();
+            s2.abort();
+            buttons_s2.clear();
         }
     }
 
+    Response response
+    {
+
+        void clear()
+        {
+            // Currently there is nothing to clear
+        }
+
+        void process_hit(time t, int value)
+        {
+            HitType validity = hit(t);
+
+            if (validity == HIT_VALID)
+            {
+                
+            }
+            else if(
+                validity == HIT_IGNORED ||
+                validity == HIT_TOO_EARLY ||
+                validity == HIT_IGNORED
+                ) // handle these when there is need for
+            {
+            }
+        }
+
+        bool has_responded()
+        {
+            // the first is to display the pictures
+            return num_valid_hits > 1;
+        }
+    }
+
+    /* * functions * */
+
+    void done (int msgid)
+    {
+        layout.reset();
+
+        signal_target(msgid);
+        target = null;
+
+        control.clear_status();
+    }
+    
+    // prepares the test_page and its overlay.
     void setup(int ntrials = -1, bool pr=false, string prompt="")
     {
         test_page_overlay.setup(this);
@@ -240,6 +403,7 @@ Page test_page {
     void cleanup()
     {
         test_page_overlay.cleanup();
+        control.button_box.disable_buttons();
     }
 
     void action(Object caller, TestItem item, time reftime, int cycle)
@@ -253,15 +417,27 @@ Page test_page {
 
         test_page_overlay.update_progress_bar(cycle);
 
+        response.start(tref);
+
         control.set_status(
             string(cycle)   + "  " +
             string(item.id) + "  "
             );
-
+        
+        target = caller;
     }
     
     void action_answer(Object caller, TestItem item, time reftime, int cycle)
     {
+        println("in action answer");
+        time tref;
+        this.item = item;
+
+        tref = test_window1.show_test_page(this, tref + INTER_TRIAL_INTERVAL);
+
+        layout.enable_pictures(item.fn1, item.fn2 , tref);
+        
+        target = caller;
     }
 
 };
