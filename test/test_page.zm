@@ -387,8 +387,7 @@ Page test_page {
         string  p1_resp_last;
         string  p2_resp_first;
         string  p2_resp_last;
-
-        void clear()
+void clear()
         {
             rt_first = -9999;
             rt_last  = -9999;
@@ -413,10 +412,20 @@ Page test_page {
                 if (value == 0 || value == 2) {
                     ans1 = "A";
                     ans2 = "B";
+
+                    layout.buttons_s1.button_a.fill_pattern_color = ACTIVATED_COLOR;
+                    layout.buttons_s1.button_b.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
+                    layout.buttons_s2.button_a.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
+                    layout.buttons_s2.button_b.fill_pattern_color = ACTIVATED_COLOR;
                 }
                 else {
                     ans1 = "B";
                     ans2 = "A";
+
+                    layout.buttons_s1.button_a.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
+                    layout.buttons_s1.button_b.fill_pattern_color = ACTIVATED_COLOR;
+                    layout.buttons_s2.button_a.fill_pattern_color = ACTIVATED_COLOR;
+                    layout.buttons_s2.button_b.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
                 }
 
                 if (rt_first < 0) {
@@ -434,6 +443,7 @@ Page test_page {
                 validity == HIT_IGNORED
                 ) // handle these when there is need for
             {
+                println("Invalid Hit" + validity);
             }
         }
 
@@ -502,7 +512,6 @@ Page test_page {
             string(item.id) + "  "
             );
 
-        
         target = caller;
 
         phase = PHASE_SENTENCES;
