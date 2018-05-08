@@ -483,8 +483,12 @@ void clear()
         // Enable button_box
         control.target = this;
 
-        // Enable buttons codes.
-        print_error("Enable the right button codes...\n");
+        // Enable the proper buttons
+        control.button_box.disable_buttons();
+        control.button_box.enable_button(0, 0);
+        control.button_box.enable_button(1, 1);
+        control.button_box.enable_button(2, 2);
+        control.button_box.enable_button(3, 3);
     }
 
     void cleanup()
