@@ -68,6 +68,26 @@ Block task
             on_event:exit()
             {
                 TestOutput output;
+
+                string s1resp1   = test_page.response_pictures.s1_resp_first;
+                string s1respfin = test_page.response_pictures.s1_resp_last;
+                string s2resp2   = test_page.response_pictures.s2_resp_first;
+                string s2respfin = test_page.response_pictures.s2_resp_last;
+
+                output.reading_time = int(test_page.response_sentences.rt);
+                output.fn1          = item.fn1;
+                output.fn2          = item.fn2;
+                output.s1           = item.s1;
+                output.s2           = item.s2;
+                output.s1_first_resp= s1resp1 == "A" ? RESP_IF_A : RESP_IF_B;
+                output.s1_final_resp= s1respfin == "A" ? RESP_IF_A : RESP_IF_B;
+                output.s2_first_resp= s2resp2 == "A" ? RESP_IF_A : RESP_IF_B;
+                output.s2_final_resp= s2respfin == "A" ? RESP_IF_A : RESP_IF_B;
+                output.first_response_time
+                                    = test_page.response_pictures.rt_first;
+                output.final_response_time
+                                    = test_page.response_pictures.rt_last;
+
                 test_output_append(prac_output, output);
             }
 
@@ -154,6 +174,27 @@ Block task
             on_event:exit()
             {
                 TestOutput output;
+
+                string s1resp1   = test_page.response_pictures.s1_resp_first;
+                string s1respfin = test_page.response_pictures.s1_resp_last;
+                string s2resp2   = test_page.response_pictures.s2_resp_first;
+                string s2respfin = test_page.response_pictures.s2_resp_last;
+
+                output.reading_time = int(test_page.response_sentences.rt);
+                output.fn1          = item.fn1;
+                output.fn2          = item.fn2;
+                output.s1           = item.s1;
+                output.s2           = item.s2;
+                output.s1_first_resp= s1resp1 == "A" ? RESP_IF_A : RESP_IF_B;
+                output.s1_final_resp= s1respfin == "A" ? RESP_IF_A : RESP_IF_B;
+                output.s2_first_resp= s2resp2 == "A" ? RESP_IF_A : RESP_IF_B;
+                output.s2_final_resp= s2respfin == "A" ? RESP_IF_A : RESP_IF_B;
+                output.first_response_time
+                                    = test_page.response_pictures.rt_first;
+                output.final_response_time
+                                    = test_page.response_pictures.rt_last;
+
+
                 test_output_append(test_output, output);
             }
 

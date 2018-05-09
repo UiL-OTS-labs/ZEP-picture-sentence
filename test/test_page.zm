@@ -387,8 +387,8 @@ Page test_page {
                 ignore_remaining_hits();
                 stop();
             }
-            else if(
-                validity == HIT_IGNORED ||
+            else if (
+                validity == HIT_IGNORED   ||
                 validity == HIT_TOO_EARLY ||
                 validity == HIT_IGNORED
                 ) // handle these when there is need for
@@ -404,22 +404,23 @@ Page test_page {
 
     Response response_pictures
     {
-        int     rt_first;
-        int     rt_last;
+        int     rt_first;       // first reaction time
+        int     rt_last;        // last reaction time
 
-        string  p1_resp_first;
-        string  p1_resp_last;
-        string  p2_resp_first;
-        string  p2_resp_last;
-void clear()
+        string  s1_resp_first; // First response on the first sentence
+        string  s1_resp_last;  // last response on the first sentence
+        string  s2_resp_first; // First response on the 2nd sentence
+        string  s2_resp_last;  // last response on the 2nd sentence
+
+        void clear()
         {
             rt_first = -9999;
             rt_last  = -9999;
 
-            p1_resp_first = "";
-            p1_resp_last  = "";
-            p2_resp_first = "";
-            p2_resp_last  = "";
+            s1_resp_first = "";
+            s1_resp_last  = "";
+            s2_resp_first = "";
+            s2_resp_last  = "";
         }
 
         void process_hit(time t, int value)
@@ -454,12 +455,12 @@ void clear()
 
                 if (rt_first < 0) {
                     rt_first        = rt;
-                    p1_resp_first   = ans1;
-                    p2_resp_first   = ans2;
+                    s1_resp_first   = ans1;
+                    s2_resp_first   = ans2;
                 }
                 rt_last      = rt;
-                p1_resp_last = ans1;
-                p2_resp_last = ans2;
+                s1_resp_last = ans1;
+                s2_resp_last = ans2;
             }
             else if(
                 validity == HIT_IGNORED   ||
