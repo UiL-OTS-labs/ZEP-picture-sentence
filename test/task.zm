@@ -75,7 +75,12 @@ Block task
             {
                 on_event:entry()
                 {
-                    test_page.action(this, item, reference_time, test.cycle);
+                    test_page.action(
+                        this,
+                        item,
+                        reference_time,
+                        test.cycle
+                        );
                 }
             }
 
@@ -156,7 +161,12 @@ Block task
             {
                 on_event:entry()
                 {
-                    test_page.action(this, item, reference_time, test.cycle);
+                    test_page.action(
+                        this,
+                        item,
+                        reference_time,
+                        test.cycle
+                        );
                 }
             }
 

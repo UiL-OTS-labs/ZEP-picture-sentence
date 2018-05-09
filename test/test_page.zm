@@ -484,10 +484,10 @@ void clear()
     {
         layout.reset();
 
+        control.clear_status();
+
         signal_target(msgid);
         target = null;
-
-        control.clear_status();
     }
     
     // prepares the test_page and its overlay.
@@ -526,7 +526,7 @@ void clear()
         time tref;
         this.item = item;
 
-        tref = test_window1.show_test_page(this, tref + INTER_TRIAL_INTERVAL);
+        tref = test_window1.show_test_page(this, reftime + INTER_TRIAL_INTERVAL);
 
         layout.enable_sentences(item.s1, item.s2, tref);
 
@@ -549,18 +549,20 @@ void clear()
     {
         time tref;
         this.item = item;
-        println("in action answer time = " + tref);
 
-        tref = test_window1.show_test_page(this, tref + INTER_TRIAL_INTERVAL);
+        tref = test_window1.show_test_page(
+            this,
+            reftime + INTER_TRIAL_INTERVAL
+            );
 
         layout.enable_pictures(item.fn1, item.fn2 , tref);
         
         response_pictures.clear();
         response_pictures.start(tref);
         
-        target = caller;
-        
         phase = PHASE_PICTURES;
+        
+        target = caller;
     }
 
 };
