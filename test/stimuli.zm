@@ -2,12 +2,12 @@
 
 record TestItem {
     int     id;         // The id of the item.
-    string  fn1;        // The filename of the first picture
-    string  fn2;        // The filename of the second picture
+    string  fn1;        // The file name of the first picture
+    string  fn2;        // The file name of the second picture
     string  s1;         // The first sentence
     string  s2;         // The second sentence
-    string  correct1;   // The answer of the upper question
-    string  correct2;   // The answer of the lower question
+    int     picA_val;   // The value when picture A is chosen
+    int     picB_val;   // The value when picture B is chosen
 };
 
 

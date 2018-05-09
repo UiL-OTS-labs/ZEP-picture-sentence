@@ -79,10 +79,16 @@ Block task
                 output.fn2          = item.fn2;
                 output.s1           = item.s1;
                 output.s2           = item.s2;
-                output.s1_first_resp= s1resp1 == "A" ? RESP_IF_A : RESP_IF_B;
-                output.s1_final_resp= s1respfin == "A" ? RESP_IF_A : RESP_IF_B;
-                output.s2_first_resp= s2resp2 == "A" ? RESP_IF_A : RESP_IF_B;
-                output.s2_final_resp= s2respfin == "A" ? RESP_IF_A : RESP_IF_B;
+
+                output.s1_first_resp=
+                    s1resp1 == "A" ? item.picA_val : item.picB_val ;
+                output.s1_final_resp=
+                    s1respfin == "A" ? item.picA_val : item.picB_val ;
+                output.s2_first_resp=
+                    s2resp2 == "A" ? item.picA_val : item.picB_val ;
+                output.s2_final_resp=
+                    s2respfin == "A" ? item.picA_val : item.picB_val ;
+
                 output.first_response_time
                                     = test_page.response_pictures.rt_first;
                 output.final_response_time
@@ -185,10 +191,16 @@ Block task
                 output.fn2          = item.fn2;
                 output.s1           = item.s1;
                 output.s2           = item.s2;
-                output.s1_first_resp= s1resp1 == "A" ? RESP_IF_A : RESP_IF_B;
-                output.s1_final_resp= s1respfin == "A" ? RESP_IF_A : RESP_IF_B;
-                output.s2_first_resp= s2resp2 == "A" ? RESP_IF_A : RESP_IF_B;
-                output.s2_final_resp= s2respfin == "A" ? RESP_IF_A : RESP_IF_B;
+
+                output.s1_first_resp=
+                    s1resp1 == "A" ? item.picA_val : item.picB_val ;
+                output.s1_final_resp=
+                    s1respfin == "A" ? item.picA_val : item.picB_val ;
+                output.s2_first_resp=
+                    s2resp2 == "A" ? item.picA_val : item.picB_val ;
+                output.s2_final_resp=
+                    s2respfin == "A" ? item.picA_val : item.picB_val ;
+
                 output.first_response_time
                                     = test_page.response_pictures.rt_first;
                 output.final_response_time

@@ -1,3 +1,3 @@
-id;fn1;fn2;s1;s2;correct1;correct2
-1;W_1_A;W_1_B;Sommigen spelen met een bal;Niemand speelt met een bal;A;B
-2;W_2_B;W_2_A;Het meisje ziet dat het slecht weer is;Het meisje ziet dat het aan het regenen is;A;B
+id;fn1;fn2;s1;s2;picA_val;picB_val
+1;W_1_A;W_1_B;Sommigen spelen met een bal;Niemand speelt met een bal;1;2
+2;W_2_B;W_2_A;Het meisje ziet dat het slecht weer is;Het meisje ziet dat het aan het regenen is;2;1
