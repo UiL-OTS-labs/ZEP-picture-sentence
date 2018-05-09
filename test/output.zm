@@ -6,10 +6,12 @@ record TestOutput {
     string  fn2;
     string  s1;
     string  s2;
-    string  s1_resp;
-    string  s2_resp;
-    bool    correct;
-    int     response_time;
+    int     s1_first_resp;
+    int     s2_first_resp;
+    int     s1_final_resp;
+    int     s2_final_resp;
+    int     first_response_time;
+    int     final_response_time;
 };
 
 // Output of the practice phase
