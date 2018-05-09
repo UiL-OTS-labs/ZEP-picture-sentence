@@ -1,3 +1,6 @@
 
 const dur   INTER_TRIAL_INTERVAL = 500ms;
 
+// The logged response values.
+const int   RESP_IF_A = 1;
+const int   RESP_IF_B = 2;
