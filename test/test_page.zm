@@ -146,6 +146,8 @@ Page test_page {
                 is_visible = false;
                 pic1.im.abort();
                 pic2.im.abort();
+                pic1.im.is_visible = false;
+                pic2.im.is_visible = false;
             }
         }
         
@@ -182,6 +184,7 @@ Page test_page {
             void clear()
             {
                 text.abort();
+                text.is_visible = false;
             }
         }
 
@@ -231,6 +234,8 @@ Page test_page {
             void clear()
             {
                 is_visible = false;
+                button_a.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
+                button_b.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
             }
         }
 
@@ -266,6 +271,7 @@ Page test_page {
             void clear()
             {
                 text.abort();
+                text.is_visible = false;
             }
             
         }
@@ -316,6 +322,8 @@ Page test_page {
             void clear()
             {
                 is_visible = false;
+                button_a.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
+                button_b.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
             }
         }
         
@@ -359,9 +367,9 @@ Page test_page {
         void reset()
         {
             pictures.clear();
-            s1.abort();
+            s1.clear();
             buttons_s1.clear();
-            s2.abort();
+            s2.clear();
             buttons_s2.clear();
 
             continue_button.is_visible = false;
@@ -483,7 +491,8 @@ Page test_page {
 
     void done (int msgid)
     {
-        layout.reset();
+        if (phase == PHASE_PICTURES)
+            layout.reset();
 
         control.clear_status();
 
