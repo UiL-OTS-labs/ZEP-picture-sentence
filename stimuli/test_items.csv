@@ -1,7 +1,7 @@
-id;fn1;fn2;s1;s2;picA_val;picB_val
-1;E_1_A;E_1_P;Martha laat het hoofd zakken;Martha laat haar hoofd zakken;1;2
-2;E_2_A;E_2_P;Pedro steekt de hand op;Pedro steekt zijn hand op;2;1
-3;C_1_R;C_1_T;Pedro slaat zichzelf op de neus;Pedro slaat hem op de neus;1;2
-4;C_2_R;C_2_T;Martha trekt haar eigen tanden;Martha trekt haar tanden;2;1
-5;F_1_R;F_1_T;Martha raakt zichzelf aan;Martha raakt haar aan;1;2
-6;F_2_T;F_2_R;Pedro wijst naar hem;Pedro wijst naar zichzelf;2;1
+id;fn1;fn2;s1;s2;picA_val;picB_val;sentence1;sentence2
+1;E_1_A;E_1_P;Martha laat het hoofd zakken;Martha laat haar hoofd zakken;1;2;SEN_ARTICLE;SEN_PRONOUN
+2;E_2_A;E_2_P;Pedro steekt de hand op;Pedro steekt zijn hand op;2;1;SEN_ARTICLE;SEN_PRONOUN
+3;C_1_R;C_1_T;Pedro slaat zichzelf op de neus;Pedro slaat hem op de neus;1;2;SEN_PRONOUN;SEN_PRONOUN
+4;C_2_R;C_2_T;Martha trekt haar eigen tanden;Martha trekt haar tanden;2;1;SEN_PRONOUN;SEN_PRONOUN
+5;F_1_R;F_1_T;Martha raakt zichzelf aan;Martha raakt haar aan;1;2;SEN_PRONOUN;SEN_PRONOUN
+6;F_2_T;F_2_R;Pedro wijst naar hem;Pedro wijst naar zichzelf;2;1;SEN_PRONOUN;SEN_PRONOUN

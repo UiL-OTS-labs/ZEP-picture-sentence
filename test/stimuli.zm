@@ -1,4 +1,15 @@
 
+// picture types used to log in output
+enum pic_t {
+    PIC_ALIENABLE       = 1,
+    PIC_NON_ALIENABLE   = 2
+};
+
+// sentence types used to log in output
+enum sen_t{
+    SEN_PRONOUN = 3,
+    SEN_ARTICLE = 4
+};
 
 record TestItem {
     int     id;         // The id of the item.
@@ -6,8 +17,10 @@ record TestItem {
     string  fn2;        // The file name of the second picture
     string  s1;         // The first sentence
     string  s2;         // The second sentence
-    int     picA_val;   // The value when picture A is chosen
-    int     picB_val;   // The value when picture B is chosen
+    pic_t   picA_val;   // The value when picture A is chosen
+    pic_t   picB_val;   // The value when picture B is chosen
+    sen_t   sentence1;  // Type of the first sentence.
+    sen_t   sentence2;  // Type of the 2nd sentence
 };
 
 
