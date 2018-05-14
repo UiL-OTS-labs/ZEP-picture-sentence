@@ -19,8 +19,8 @@ record TestItem {
     string  s2;         // The second sentence
     pic_t   picA_val;   // The value when picture A is chosen
     pic_t   picB_val;   // The value when picture B is chosen
-    sen_t   sentence1;  // Type of the first sentence.
-    sen_t   sentence2;  // Type of the 2nd sentence
+    sen_t   s1_type;    // Type of the first sentence.
+    sen_t   s2_type;    // Type of the 2nd sentence
 };
 
 

@@ -80,6 +80,9 @@ Block task
                 output.s1           = item.s1;
                 output.s2           = item.s2;
 
+                output.s1_type      = item.s1_type;
+                output.s2_type      = item.s2_type;
+
                 output.s1_first_resp=
                     s1resp1 == "A" ? item.picA_val : item.picB_val ;
                 output.s1_final_resp=
@@ -191,6 +194,9 @@ Block task
                 output.fn2          = item.fn2;
                 output.s1           = item.s1;
                 output.s2           = item.s2;
+
+                output.s1_type      = item.s1_type;
+                output.s2_type      = item.s2_type;
 
                 output.s1_first_resp=
                     s1resp1 == "A" ? item.picA_val : item.picB_val ;
