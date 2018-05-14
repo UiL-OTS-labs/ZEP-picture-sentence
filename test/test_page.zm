@@ -31,7 +31,6 @@ Page test_page {
         }
         else if (phase == PHASE_PICTURES)
         {
-            // Enable buttons to respond here
             if (input_key == ' ') {
                 if (response_pictures.has_responded()) {
                     done(CONTINUE);
