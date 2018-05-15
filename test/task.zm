@@ -69,6 +69,9 @@ Block task
             {
                 TestOutput output;
 
+                output.id       = item.id;
+                output.type     = item.type;
+
                 string s1resp1   = test_page.response_pictures.s1_resp_first;
                 string s1respfin = test_page.response_pictures.s1_resp_last;
                 string s2resp2   = test_page.response_pictures.s2_resp_first;
@@ -183,6 +186,9 @@ Block task
             on_event:exit()
             {
                 TestOutput output;
+
+                output.id       = item.id;
+                output.type     = item.type;
 
                 string s1resp1   = test_page.response_pictures.s1_resp_first;
                 string s1respfin = test_page.response_pictures.s1_resp_last;
