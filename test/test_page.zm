@@ -421,6 +421,7 @@ Page test_page {
 
             if (validity == HIT_VALID)
             {
+                rt = int(reaction_time(0));
                 ignore_remaining_hits();
                 stop();
             }
