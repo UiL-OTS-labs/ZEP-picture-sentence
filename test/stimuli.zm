@@ -11,8 +11,16 @@ enum sen_t{
     SEN_ARTICLE = 4
 };
 
+enum item_type {
+    ITEM_PRACTICE,
+    ITEM_TARGET,
+    ITEM_FILLER,
+    ITEM_CONTROL
+};
+
 record TestItem {
     int     id;         // The id of the item.
+    item_type type;     // What type of trial it is.
     string  fn1;        // The file name of the first picture
     string  fn2;        // The file name of the second picture
     string  s1;         // The first sentence

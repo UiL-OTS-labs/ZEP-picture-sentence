@@ -82,7 +82,13 @@ Page test_page {
         }
         else if (phase == PHASE_PICTURES)
         {
-            response_pictures.process_hit(event_time, message_arg);
+            if (message_arg < 0) {
+                if (response_pictures.has_responded())
+                    done(CONTINUE);
+            }
+            else {
+                response_pictures.process_hit(event_time, message_arg);
+            }
         }
     }
 
@@ -550,9 +556,8 @@ Page test_page {
         // Enable the proper buttons
         control.button_box.disable_buttons();
         control.button_box.enable_button(0, 0);
-        control.button_box.enable_button(1, 1);
-        control.button_box.enable_button(2, 2);
-        control.button_box.enable_button(3, 3);
+        control.button_box.enable_button(1, -1);
+        control.button_box.enable_button(2, 1);
     }
 
     void cleanup()

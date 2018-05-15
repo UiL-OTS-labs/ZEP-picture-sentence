@@ -1,9 +1,73 @@
 
 import stimuli;
 
+/**
+ * Shuffles stimuli until the bool succeeded is set.
+ */
 int shuffle_stimuli()
 {
-    print_error("pseudo randomize stims.\n");
-    test_items.shuffle(0, -1);
-    return OK;
+    int i;
+    bool succeeded = false;
+    int NATTEMPTS = 1000;
+
+    while (i < NATTEMPTS && !succeeded) {
+        //println("Shuffle attempt = " + (i + 1));
+        test_items.shuffle(0, -1);
+
+        succeeded = check_item_order(test_items);
+        //dump_test_items(test_items);
+        if (succeeded)
+            break;
+
+        i++;
+    }
+
+    if (!succeeded) {
+        print_error ( "After " + NATTEMPTS + " attempts to randomize "
+            "no sequence is found that meets the criteria for this experiment.\n"
+            "We give up...\n"
+            );
+    }
+
+    return succeeded ? OK : ERROR;
+}
+
+/**
+ * checks the item order. If there are more than n ITEM_TARGET in a row
+ * the order is disapproved.
+ */
+bool check_item_order(TestItem[] items)
+{
+    int n = 2;
+    int i = n;
+
+    while (i < items.size) {
+        int j = i;
+        bool found_deviant = false;
+        
+        while (j >= i - n) {
+           if (items[j].type != ITEM_TARGET) {
+               found_deviant = true;
+               break;
+           }
+           j--;
+        }
+
+        if (!found_deviant)
+            return false;
+
+        i++;
+    }
+    return true;
+}
+
+
+// prints the test items
+void dump_test_items (TestItem[] items)
+{
+    int i;
+    while (i < items.size) {
+        println(string(items[i].type));
+        i++;
+    }
 }
