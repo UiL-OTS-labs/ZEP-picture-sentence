@@ -10,6 +10,32 @@ enum TrialPhase {
 
 const color ACTIVATED_COLOR = color:orange;
 
+// Given a canvas, this function tries to put the image in the center of
+// the screen in such a way that it fits precisely on the longest axis.
+// For the moment this function assumes that the Canvas is square shaped.
+void center_picture_in_canvas(CanvasGadget c, ImageShape im, string fn)
+{
+    im.image = fn;
+    real scaling;
+    real pheight = im.actual_height;
+    real pwidth  = im.actual_width;
+    if (pwidth > pheight)
+        scaling = c.width / pwidth;
+    else
+        scaling = c.height / pheight;
+
+    real scaled_width = scaling * pwidth;
+    real scaled_height= scaling * pheight;
+
+    if (abs(scaled_width - c.width) > 1)
+        c.offset_x = (c.width - scaled_width)/2;
+    if (abs(scaled_height - c.height) > 1)
+        c.offset_y = (c.height - scaled_height)/2;
+    
+    im.scaling_x = scaling;
+    im.scaling_y = scaling;
+}
+
 // The test page of the trial. Initially two sentences will be visible
 Page test_page {
 
@@ -107,6 +133,7 @@ Page test_page {
                 ImageShape im
                 {
                 }
+
             }
 
             LabelGadget label1
@@ -131,8 +158,11 @@ Page test_page {
 
             time display_pictures (string fn1, string fn2, time t)
             {
-                pic1.im.image = stimuli_dir() + "pictures/" + fn1 + ".png";
-                pic2.im.image = stimuli_dir() + "pictures/" + fn2 + ".png";
+                string name1 = stimuli_dir() + "pictures/" + fn1 + ".png";
+                string name2 = stimuli_dir() + "pictures/" + fn2 + ".png";
+
+                center_picture_in_canvas(pic1, pic1.im, name1);
+                center_picture_in_canvas(pic2, pic2.im, name2);
 
                 pic1.im.start(t);
                 pic2.im.start(t);
