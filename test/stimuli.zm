@@ -1,0 +1,45 @@
+
+// picture types used to log in output
+enum pic_t {
+    PIC_ALIENABLE       = 1,
+    PIC_NON_ALIENABLE   = 2
+};
+
+// sentence types used to log in output
+enum sen_t{
+    SEN_PRONOUN = 3,
+    SEN_ARTICLE = 4
+};
+
+record TestItem {
+    int     id;         // The id of the item.
+    string  fn1;        // The file name of the first picture
+    string  fn2;        // The file name of the second picture
+    string  s1;         // The first sentence
+    string  s2;         // The second sentence
+    pic_t   picA_val;   // The value when picture A is chosen
+    pic_t   picB_val;   // The value when picture B is chosen
+    sen_t   s1_type;    // Type of the first sentence.
+    sen_t   s2_type;    // Type of the 2nd sentence
+};
+
+
+TestItem[..] prac_items;
+TestItem[..] test_items;
+TestItem[..] test_items_bl1;
+TestItem[..] test_items_bl2;
+
+int load_stimuli()
+{
+    println("Loading stimuli.");
+    string fn_prac = stimuli_dir() + "prac_items.csv";
+    string fn_test = stimuli_dir() + "test_items.csv";
+
+    int result = prac_items.load(fn_prac, true, 0);
+    if (result != OK)
+        return result;
+
+    result =  test_items.load(fn_test, true, 0);
+    return result;
+}
+

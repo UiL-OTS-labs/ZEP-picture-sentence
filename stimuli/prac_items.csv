@@ -1,0 +1,3 @@
+id;fn1;fn2;s1;s2;picA_val;picB_val;sentence1;sentence2
+1;W_1_A;W_1_B;Sommigen spelen met een bal;Niemand speelt met een bal;PIC_ALIENABLE;PIC_NON_ALIENABLE;SEN_PRONOUN;SEN_ARTICLE
+2;W_2_B;W_2_A;Het meisje ziet dat het slecht weer is;Het meisje ziet dat het aan het regenen is;PIC_NON_ALIENABLE;PIC_ALIENABLE;SEN_ARTICLE;SEN_PRONOUN

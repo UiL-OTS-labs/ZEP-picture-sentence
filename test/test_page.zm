@@ -1,0 +1,607 @@
+
+import defs;
+
+const int LINE_WIDTH = 1000;
+
+enum TrialPhase {
+    PHASE_SENTENCES,
+    PHASE_PICTURES
+}
+
+const color ACTIVATED_COLOR = color:orange;
+
+// Given a canvas, this function tries to put the image in the center of
+// the screen in such a way that it fits precisely on the longest axis.
+// For the moment this function assumes that the Canvas is square shaped.
+void center_picture_in_canvas(CanvasGadget c, ImageShape im, string fn)
+{
+    im.image = fn;
+    real scaling;
+    real pheight = im.actual_height;
+    real pwidth  = im.actual_width;
+    if (pwidth > pheight)
+        scaling = c.width / pwidth;
+    else
+        scaling = c.height / pheight;
+
+    real scaled_width = scaling * pwidth;
+    real scaled_height= scaling * pheight;
+
+    if (abs(scaled_width - c.width) > 1)
+        c.offset_x = (c.width - scaled_width)/2;
+    if (abs(scaled_height - c.height) > 1)
+        c.offset_y = (c.height - scaled_height)/2;
+    
+    im.scaling_x = scaling;
+    im.scaling_y = scaling;
+}
+
+// The test page of the trial. Initially two sentences will be visible
+Page test_page {
+
+    TestItem    item;  // Trial parameters
+    TrialPhase  phase; // Indicates where we are in a trial.
+
+    init()
+    {
+        fill_pattern_color = TEST_PAGE_COLOR;
+    }
+
+    // Enable to respond using the keyboard
+    on_event:key_press()
+    {
+        if (phase == PHASE_SENTENCES)
+        {
+            if (input_key == ' ' || input_key == KEY_Return)
+                response_sentences.process_hit(event_time, 0);
+        }
+        else if (phase == PHASE_PICTURES)
+        {
+            if (input_key == ' ') {
+                if (response_pictures.has_responded()) {
+                    done(CONTINUE);
+                }
+            }
+            else if (input_key == 'a' || input_key == 'A')
+                response_pictures.process_hit(event_time, 0);
+            else if (input_key == 'z' || input_key == 'Z')
+                response_pictures.process_hit(event_time, 1);
+            else if (input_key == 'm' || input_key == 'M')
+                response_pictures.process_hit(event_time, 2);
+            else if (input_key == 'k' || input_key == 'K')
+                response_pictures.process_hit(event_time, 3);
+        }
+    }
+
+    // Enable to respond via the BeexyBox
+    on_event:message()
+    {
+        if (phase == PHASE_SENTENCES)
+        {
+            response_sentences.process_hit(event_time, message_arg);
+        }
+        else if (phase == PHASE_PICTURES)
+        {
+            response_pictures.process_hit(event_time, message_arg);
+        }
+    }
+
+    VerticalLayout layout
+    {
+        on_event:init()
+        {
+            spacing         = 10;
+            height          = 0;     // 0 means as big as possible
+            is_visible      = true;
+            top_margin      = 100;
+            bottom_margin   = 100;
+            //options = LAYOUT_SHRINK_ITEMS_VER; 
+        }
+
+        HorGridLayout pictures
+        {
+            on_event:init()
+            {
+                hor_spacing = 40;
+                ver_spacing = 40;
+                width       = 0;     // 0 means as big as possible
+                wrap_count  = 2;
+                options     = LAYOUT_SHRINK_ITEMS;
+            }
+
+            CanvasGadget pic1
+            {
+                on_event:init()
+                {
+                    fill_pattern_color = TEST_PAGE_STIMULUS_COLOR;
+                    size = 300,300;
+                }
+
+                ImageShape im
+                {
+                }
+            }
+            
+            CanvasGadget pic2
+            {
+                on_event:init()
+                {
+                    fill_pattern_color = TEST_PAGE_STIMULUS_COLOR;
+                    size = 300,300;
+                }
+
+                ImageShape im
+                {
+                }
+
+            }
+
+            LabelGadget label1
+            {
+                on_event:init()
+                {
+                    text = "A";
+                    font_family = TEST_PAGE_LABEL_FONT_FAMILY;
+                    font_size = TEST_PAGE_LABEL_FONT_SIZE;
+                }
+            }
+
+            LabelGadget label2
+            {
+                on_event:init()
+                {
+                    text = "B";
+                    font_family = TEST_PAGE_LABEL_FONT_FAMILY;
+                    font_size = TEST_PAGE_LABEL_FONT_SIZE;
+                }
+            }
+
+            time display_pictures (string fn1, string fn2, time t)
+            {
+                string name1 = stimuli_dir() + "pictures/" + fn1 + ".png";
+                string name2 = stimuli_dir() + "pictures/" + fn2 + ".png";
+
+                center_picture_in_canvas(pic1, pic1.im, name1);
+                center_picture_in_canvas(pic2, pic2.im, name2);
+
+                pic1.im.start(t);
+                pic2.im.start(t);
+
+                return pic2.im.expected_start_time;
+            }
+
+            void clear()
+            {
+                is_visible = false;
+                pic1.im.abort();
+                pic2.im.abort();
+                pic1.im.is_visible = false;
+                pic2.im.is_visible = false;
+            }
+        }
+        
+        Spacer {}
+
+        CanvasGadget s1
+        {
+            on_event:init()
+            {
+                fill_pattern_color = TEST_PAGE_STIMULUS_COLOR;
+                size = LINE_WIDTH,100;
+                is_visible = true;
+            }
+
+            TextShape text
+            {
+                on_event:init()
+                {
+//                    size                = LINE_WIDTH,100;
+                    font_family         = TEST_PAGE_STIMULUS_FONT_FAMILY;
+                    font_size           = TEST_PAGE_STIMULUS_FONT_SIZE;
+                    line_pattern_color  = TEST_PAGE_STIMULUS_TEXT_COLOR;
+                    line_width          = LINE_WIDTH;
+                }
+            }
+
+            time enable_sentence(string s, time t, dur d=-1ms)
+            {
+                text.text = s;
+                text.start(t, d);
+                return text.expected_start_time;
+            }
+
+            void clear()
+            {
+                text.abort();
+                text.is_visible = false;
+            }
+        }
+
+        HorizontalLayout buttons_s1
+        {
+            on_event:init()
+            {
+                spacing = 300;
+                width = 0;     // 0 means as big as possible
+//                options = LAYOUT_STRETCH_ITEMS;
+            }
+
+            ButtonGadget button_a
+            {
+                on_event:init()
+                {
+                    text = "A";
+                    fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
+                    font_family = TEST_PAGE_BUTTON_FONT_FAMILY;
+                    font_size = TEST_PAGE_BUTTON_FONT_SIZE;
+                    width = 100;
+                }
+
+                on_event:activate()
+                {
+                    response_pictures.process_hit(event_time, 0);
+                }
+            }
+            
+            ButtonGadget button_b
+            {
+                on_event:init()
+                {
+                    text = "B";
+                    fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
+                    font_family = TEST_PAGE_BUTTON_FONT_FAMILY;
+                    font_size = TEST_PAGE_BUTTON_FONT_SIZE;
+                    width = 100;
+                }
+
+                on_event:activate()
+                {
+                    response_pictures.process_hit(event_time, 3);
+                }
+            }
+
+            void clear()
+            {
+                is_visible = false;
+                button_a.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
+                button_b.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
+            }
+        }
+
+        Spacer {}
+
+        CanvasGadget s2
+        {
+            on_event:init()
+            {
+                fill_pattern_color  = TEST_PAGE_STIMULUS_COLOR;
+                size = LINE_WIDTH,100;
+            }
+            
+            TextShape text
+            {
+                on_event:init()
+                {
+//                    size = LINE_WIDTH,100;
+                    font_family         = TEST_PAGE_STIMULUS_FONT_FAMILY;
+                    font_size           = TEST_PAGE_STIMULUS_FONT_SIZE;
+                    line_pattern_color  = TEST_PAGE_STIMULUS_TEXT_COLOR;
+                    line_width          = LINE_WIDTH;
+                }
+            }
+            
+            time enable_sentence(string s, time t, dur d=-1ms)
+            {
+                text.text = s;
+                text.start(t, d);
+                return text.expected_start_time;
+            }
+            
+            void clear()
+            {
+                text.abort();
+                text.is_visible = false;
+            }
+            
+        }
+
+        HorizontalLayout buttons_s2
+        {
+            on_event:init()
+            {
+                spacing = 300;
+                width = 0;     // 0 means as big as possible
+                //options = LAYOUT_SPREAD_ITEMS;
+            }
+            
+            ButtonGadget button_a
+            {
+                on_event:init()
+                {
+                    text = "A";
+                    fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
+                    font_family = TEST_PAGE_BUTTON_FONT_FAMILY;
+                    font_size = TEST_PAGE_BUTTON_FONT_SIZE;
+                    width = 100;
+                }
+
+                on_event:activate()
+                {
+                    response_pictures.process_hit(event_time, 1);
+                }
+            }
+            
+            ButtonGadget button_b
+            {
+                on_event:init()
+                {
+                    text = "B";
+                    fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
+                    font_family = TEST_PAGE_BUTTON_FONT_FAMILY;
+                    font_size = TEST_PAGE_BUTTON_FONT_SIZE;
+                    width = 100;
+                }
+
+                on_event:activate()
+                {
+                    response_pictures.process_hit(event_time, 2);
+                }
+            }
+
+            void clear()
+            {
+                is_visible = false;
+                button_a.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
+                button_b.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
+            }
+        }
+        
+        ButtonGadget continue_button
+        {
+            on_event:init()
+            {
+                text = CONTINUE_BUTTON_TEXT;
+                font_family = TEST_PAGE_BUTTON_FONT_FAMILY;
+                font_size = TEST_PAGE_BUTTON_FONT_SIZE;
+                is_visible = false;
+            }
+
+            on_event:activate()
+            {
+                done(CONTINUE);
+            }
+        }
+
+        time enable_sentences(string s1, string s2, time onset)
+        {
+            time t = layout.s1.enable_sentence(s1, onset);
+            layout.s2.enable_sentence(s2, onset);
+
+            layout.pictures.is_visible      = false;
+            layout.buttons_s1.is_visible    = false;
+            layout.buttons_s2.is_visible    = false;
+
+            return t;
+        }
+
+        time enable_pictures(string fn1, string fn2, time onset)
+        {
+            layout.pictures.is_visible      = true;
+            layout.buttons_s1.is_visible    = true;
+            layout.buttons_s2.is_visible    = true;
+
+            return layout.pictures.display_pictures(fn1, fn2, onset);
+        }
+
+        void reset()
+        {
+            pictures.clear();
+            s1.clear();
+            buttons_s1.clear();
+            s2.clear();
+            buttons_s2.clear();
+
+            continue_button.is_visible = false;
+        }
+    }
+
+    Response response_sentences
+    {
+        int rt;
+
+        void clear()
+        {
+            // Currently there is nothing to clear
+            rt = -9999;
+        }
+
+        void process_hit(time t, int value)
+        {
+            HitType validity = hit(t);
+
+            if (validity == HIT_VALID)
+            {
+                ignore_remaining_hits();
+                stop();
+            }
+            else if (
+                validity == HIT_IGNORED   ||
+                validity == HIT_TOO_EARLY ||
+                validity == HIT_IGNORED
+                ) // handle these when there is need for
+            {
+            }
+        }
+
+        on_event:finish()
+        {
+            done(CONTINUE);
+        }
+    }
+
+    Response response_pictures
+    {
+        int     rt_first;       // first reaction time
+        int     rt_last;        // last reaction time
+
+        string  s1_resp_first; // First response on the first sentence
+        string  s1_resp_last;  // last response on the first sentence
+        string  s2_resp_first; // First response on the 2nd sentence
+        string  s2_resp_last;  // last response on the 2nd sentence
+
+        void clear()
+        {
+            rt_first = -9999;
+            rt_last  = -9999;
+
+            s1_resp_first = "";
+            s1_resp_last  = "";
+            s2_resp_first = "";
+            s2_resp_last  = "";
+        }
+
+        void process_hit(time t, int value)
+        {
+            HitType validity = hit(t);
+
+            if (validity == HIT_VALID)
+            {
+                layout.continue_button.is_visible = true;
+                int rt = int(reaction_time(num_valid_hits - 1));
+                string ans1;
+                string ans2;
+
+                if (value == 0 || value == 2) {
+                    ans1 = "A";
+                    ans2 = "B";
+
+                    layout.buttons_s1.button_a.fill_pattern_color = ACTIVATED_COLOR;
+                    layout.buttons_s1.button_b.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
+                    layout.buttons_s2.button_a.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
+                    layout.buttons_s2.button_b.fill_pattern_color = ACTIVATED_COLOR;
+                }
+                else {
+                    ans1 = "B";
+                    ans2 = "A";
+
+                    layout.buttons_s1.button_a.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
+                    layout.buttons_s1.button_b.fill_pattern_color = ACTIVATED_COLOR;
+                    layout.buttons_s2.button_a.fill_pattern_color = ACTIVATED_COLOR;
+                    layout.buttons_s2.button_b.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
+                }
+
+                if (rt_first < 0) {
+                    rt_first        = rt;
+                    s1_resp_first   = ans1;
+                    s2_resp_first   = ans2;
+                }
+                rt_last      = rt;
+                s1_resp_last = ans1;
+                s2_resp_last = ans2;
+            }
+            else if(
+                validity == HIT_IGNORED   ||
+                validity == HIT_TOO_EARLY ||
+                validity == HIT_IGNORED
+                ) // handle these when there is need for
+            {
+                println("Invalid Hit" + validity);
+            }
+        }
+
+        bool has_responded()
+        {
+            // the first is to display the pictures
+            return rt_first >= 0;
+        }
+    }
+
+    /* * functions * */
+
+    void done (int msgid)
+    {
+        if (phase == PHASE_PICTURES)
+            layout.reset();
+
+        control.clear_status();
+
+        signal_target(msgid);
+        target = null;
+    }
+    
+    // prepares the test_page and its overlay.
+    void setup(int ntrials = -1, bool pr=false, string prompt="")
+    {
+        test_page_overlay.setup(this);
+
+        // Show or hide prompt.
+        if (pr)
+            test_page_overlay.show_prompt(prompt);
+        else
+            test_page_overlay.show_prompt("");
+
+        // Enable or disable the progress bar or disable when ntrials < 0        
+        test_page_overlay.show_progress_bar(ntrials);
+
+        // Enable button_box
+        control.target = this;
+
+        // Enable the proper buttons
+        control.button_box.disable_buttons();
+        control.button_box.enable_button(0, 0);
+        control.button_box.enable_button(1, 1);
+        control.button_box.enable_button(2, 2);
+        control.button_box.enable_button(3, 3);
+    }
+
+    void cleanup()
+    {
+        test_page_overlay.cleanup();
+        control.button_box.disable_buttons();
+    }
+
+    void action(Object caller, TestItem item, time reftime, int cycle)
+    {
+        time tref;
+        this.item = item;
+
+        tref = test_window1.show_test_page(this, reftime + INTER_TRIAL_INTERVAL);
+
+        layout.enable_sentences(item.s1, item.s2, tref);
+
+        test_page_overlay.update_progress_bar(cycle);
+
+        response_sentences.clear();
+        response_sentences.start(tref);
+
+        control.set_status(
+            string(cycle)   + "  " +
+            string(item.id) + "  "
+            );
+
+        target = caller;
+
+        phase = PHASE_SENTENCES;
+    }
+    
+    void action_answer(Object caller, TestItem item, time reftime, int cycle)
+    {
+        time tref;
+        this.item = item;
+
+        tref = test_window1.show_test_page(
+            this,
+            reftime + INTER_TRIAL_INTERVAL
+            );
+
+        layout.enable_pictures(item.fn1, item.fn2 , tref);
+        
+        response_pictures.clear();
+        response_pictures.start(tref);
+        
+        phase = PHASE_PICTURES;
+        
+        target = caller;
+    }
+
+};

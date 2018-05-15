@@ -1,0 +1,49 @@
+
+// Describes the output of each trial in the experiment.
+record TestOutput {
+    int     reading_time;           // time to read sentences
+    string  fn1;                    // filename of first picture
+    string  fn2;                    // filename of 2nd picture
+    string  s1;                     // first sentence
+    string  s2;                     // 2nd sentence
+    int     s1_type;                // the type of the sentence 1
+    int     s2_type;                // the type of the sentence 2
+    int     s1_first_resp;          // value of the first response on sentence 1
+    int     s2_first_resp;          // value of the first response on sentence 2
+    int     s1_final_resp;          // value of the last response on sentence 1
+    int     s2_final_resp;          // value of the last response on sentence 2
+    int     first_response_time;    // rt of the first response
+    int     final_response_time;    // rt of the last response
+};
+
+// Output of the practice phase
+TestOutput[..]  prac_output;
+// Output of the test phase
+TestOutput[..]  test_output;
+
+// Increases the size of the array by one and put the new value there.
+void test_output_append(TestOutput[] array, TestOutput output)
+{
+    array.size = array.size + 1;
+    array[array.size - 1] = output;
+}
+
+// save the practise output
+void prac_output_save()
+{
+    // Append table to CSV file (create if non-existent). The filename format
+    // is: <dbname>/<dbnum>/<expname>/<phasename>/ses<sesid>-<tblnum>.csv
+    string fn = expdb.experiment.session.create_table("practice", 1);
+    prac_output.append(fn, namespace_name + ": prac results");
+    prac_output.size = 0;
+}
+
+// save the test output
+void test_output_save()
+{
+    // Append table to CSV file (create if non-existent). The filename format
+    // is: <dbname>/<dbnum>/<expname>/<phasename>/ses<sesid>-<tblnum>.csv
+    string fn = expdb.experiment.session.create_table(namespace_name, 2);
+    test_output.append(fn, namespace_name + ": test results");
+    test_output.size = 0;
+}

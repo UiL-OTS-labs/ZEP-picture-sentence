@@ -1,0 +1,9 @@
+
+import stimuli;
+
+int shuffle_stimuli()
+{
+    print_error("pseudo randomize stims.\n");
+    test_items.shuffle(0, -1);
+    return OK;
+}

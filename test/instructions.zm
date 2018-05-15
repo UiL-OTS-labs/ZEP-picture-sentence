@@ -1,6 +1,17 @@
 
+// The instruction prior to the practice phase.
 const string    PRE_PRAC_INSTRUCTION    = 
    M"<b>Dear participant,</b>\n\n"
     "You are about to start with the practice phase of the experiment.\n"
     "You'll see two sentences, read them and press a button"
+    ;
+
+// The instruction prior to the test phase.
+const string    PRE_TEST_INSTRUCTION    = 
+   M"<b>Dear participant,</b>\n\n"
+    "You are about to start with the test phase of the experiment.\n"
+    "If you have any remaining questions now is the time to ask\n"
+    "the experimenter.\n"
+    "\n"
+    "Press any button to continue."
     ;

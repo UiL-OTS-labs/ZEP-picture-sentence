@@ -1,11 +1,14 @@
 
 import instructions;
+import output;
+import test_page;
 
-Block test
+Block task 
 {
     on_event:entry()
     {
-//        if (shuffle_items() != OK)
+        // Shuffling happens in modules/session.zm
+//        if (shuffle_stimuli() != OK)
 //            terminate "Unable to shuffle test items.";
     }
 
@@ -19,7 +22,7 @@ Block test
     }
 
 
-    Part instructions
+    Part prac_instruction
     {
         on_event:entry()
         {
@@ -29,9 +32,220 @@ Block test
             control.button_box.enable_all_buttons(CONTINUE);
         }
     }
+
+    Part
+    {
+        on_event:entry()
+        {
+            blank_page.action_auto(this, 500ms);
+            control.button_box.enable_all_buttons(CONTINUE);
+        }
+    }
+
+    Block practice
+    {
+        on_event:entry()
+        {
+            num_cycles = prac_items.size;
+            test_page.setup(num_cycles, true);
+        }
+        
+        on_event:exit()
+        {
+            test_page.cleanup();
+            // prac_output_save();
+        }
+
+        Trial trial
+        {
+            TestItem item;
+
+            on_event:entry()
+            {
+                item = prac_items[practice.cycle];
+            }
+
+            on_event:exit()
+            {
+                TestOutput output;
+
+                string s1resp1   = test_page.response_pictures.s1_resp_first;
+                string s1respfin = test_page.response_pictures.s1_resp_last;
+                string s2resp2   = test_page.response_pictures.s2_resp_first;
+                string s2respfin = test_page.response_pictures.s2_resp_last;
+
+                output.reading_time = int(test_page.response_sentences.rt);
+                output.fn1          = item.fn1;
+                output.fn2          = item.fn2;
+                output.s1           = item.s1;
+                output.s2           = item.s2;
+
+                output.s1_type      = item.s1_type;
+                output.s2_type      = item.s2_type;
+
+                output.s1_first_resp=
+                    s1resp1 == "A" ? item.picA_val : item.picB_val ;
+                output.s1_final_resp=
+                    s1respfin == "A" ? item.picA_val : item.picB_val ;
+                output.s2_first_resp=
+                    s2resp2 == "A" ? item.picA_val : item.picB_val ;
+                output.s2_final_resp=
+                    s2respfin == "A" ? item.picA_val : item.picB_val ;
+
+                output.first_response_time
+                                    = test_page.response_pictures.rt_first;
+                output.final_response_time
+                                    = test_page.response_pictures.rt_last;
+
+                test_output_append(prac_output, output);
+            }
+
+            SubTrial reading
+            {
+                on_event:entry()
+                {
+                    test_page.action(
+                        this,
+                        item,
+                        reference_time,
+                        test.cycle
+                        );
+                }
+            }
+
+            SubTrial answer
+            {
+                on_event:entry()
+                {
+                    test_page.action_answer(
+                        this,
+                        item,
+                        reference_time,
+                        test.cycle
+                        );
+                }
+            }
+        }
+    }
+    
+    Part
+    {
+        on_event:entry()
+        {
+            blank_page.action_auto(this, 500ms);
+            control.button_box.enable_all_buttons(CONTINUE);
+        }
+    }
+
+    Part test_instruction
+    {
+        on_event:entry()
+        {
+            pause_page.set_text(PRE_TEST_INSTRUCTION, true);
+
+            pause_page.action(this);
+            control.button_box.enable_all_buttons(CONTINUE);
+        }
+    }
+    
+    Part
+    {
+        on_event:entry()
+        {
+            blank_page.action_auto(this, 500ms);
+            control.button_box.enable_all_buttons(CONTINUE);
+        }
+    }
+
+    Block test
+    {
+        on_event:entry()
+        {
+            num_cycles = test_items.size;
+            test_page.setup(num_cycles, true);
+        }
+
+        on_event:exit()
+        {
+            test_page.cleanup();
+            test_output_save();
+        }
+
+        Trial trial
+        {
+            TestItem item;
+
+            on_event:entry()
+            {
+                item = test_items[test.cycle];
+            }
+
+            on_event:exit()
+            {
+                TestOutput output;
+
+                string s1resp1   = test_page.response_pictures.s1_resp_first;
+                string s1respfin = test_page.response_pictures.s1_resp_last;
+                string s2resp2   = test_page.response_pictures.s2_resp_first;
+                string s2respfin = test_page.response_pictures.s2_resp_last;
+
+                output.reading_time = int(test_page.response_sentences.rt);
+                output.fn1          = item.fn1;
+                output.fn2          = item.fn2;
+                output.s1           = item.s1;
+                output.s2           = item.s2;
+
+                output.s1_type      = item.s1_type;
+                output.s2_type      = item.s2_type;
+
+                output.s1_first_resp=
+                    s1resp1 == "A" ? item.picA_val : item.picB_val ;
+                output.s1_final_resp=
+                    s1respfin == "A" ? item.picA_val : item.picB_val ;
+                output.s2_first_resp=
+                    s2resp2 == "A" ? item.picA_val : item.picB_val ;
+                output.s2_final_resp=
+                    s2respfin == "A" ? item.picA_val : item.picB_val ;
+
+                output.first_response_time
+                                    = test_page.response_pictures.rt_first;
+                output.final_response_time
+                                    = test_page.response_pictures.rt_last;
+
+
+                test_output_append(test_output, output);
+            }
+
+            SubTrial reading
+            {
+                on_event:entry()
+                {
+                    test_page.action(
+                        this,
+                        item,
+                        reference_time,
+                        test.cycle
+                        );
+                }
+            }
+
+            SubTrial answer
+            {
+                on_event:entry()
+                {
+                    test_page.action_answer(
+                        this,
+                        item,
+                        reference_time,
+                        test.cycle
+                        );
+                }
+            }
+        }
+    }
 }
 
 void action(Part caller)
 {
-    test.enter(caller);
+    task.enter(caller);
 }
