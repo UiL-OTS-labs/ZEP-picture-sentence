@@ -99,8 +99,8 @@ Page test_page {
             spacing         = 10;
             height          = 0;     // 0 means as big as possible
             is_visible      = true;
-            top_margin      = 40;
-            bottom_margin   = 40;
+            top_margin      = 60;
+            bottom_margin   = 60;
             //options = LAYOUT_SHRINK_ITEMS_VER; 
         }
 
@@ -361,6 +361,8 @@ Page test_page {
                 button_b.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
             }
         }
+
+        Spacer {}
         
         ButtonGadget continue_button
         {
