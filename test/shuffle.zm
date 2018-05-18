@@ -9,6 +9,7 @@ int shuffle_stimuli()
     int i;
     bool succeeded = false;
     int NATTEMPTS = 1000;
+    println("Shuffling");
 
     while (i < NATTEMPTS && !succeeded) {
         //println("Shuffle attempt = " + (i + 1));
