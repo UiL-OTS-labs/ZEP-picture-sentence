@@ -2,13 +2,20 @@
 // picture types used to log in output
 enum pic_t {
     PIC_ALIENABLE       = 1,
-    PIC_NON_ALIENABLE   = 2
+    PIC_NON_ALIENABLE   = 2,
+    P_CORRECT           = 3,
+    P_FALSE             = 4
 };
 
 // sentence types used to log in output
 enum sen_t{
-    SEN_PRONOUN = 3,
-    SEN_ARTICLE = 4
+    SEN_PRONOUN         = 3,
+    SEN_ARTICLE         = 4,
+    SEN_PRACTICE        = 5,
+    SEN_C_REFLEXIVE     = 6,
+    SEN_C_TRANSITIVE    = 7,
+    SEN_F_REFLEXIVE     = 8,
+    SEN_F_TRANSITIVE    = 9
 };
 
 enum item_type {
