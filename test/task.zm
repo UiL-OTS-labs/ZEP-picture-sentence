@@ -3,6 +3,32 @@ import instructions;
 import output;
 import test_page;
 
+// Returns the interpretation of the participant
+inter_t interpretation(pic_t p, sen_t s)
+{
+    if (
+            (p == PIC_ALIENABLE && s == SEN_ARTICLE) ||
+            (p == PIC_NON_ALIENABLE && s == SEN_PRONOUN)
+        ) {
+        return INT_NL;
+    }
+    else if (
+            (p == PIC_NON_ALIENABLE && s == SEN_ARTICLE) ||
+            (p == PIC_ALIENABLE && s == SEN_PRONOUN)
+        ) {
+        return INT_ES;
+    }
+    else {
+        return INT_NOT_RELEVANT;
+    }
+
+    // This is bs, because the control flow will never arrive here. 
+    // Unfortunately Zep requires it otherwise it will think the function
+    // doesn't return a value, however it will always return a value from the
+    // conditional statements above...
+    return INT_NOT_RELEVANT;
+}
+
 Block task 
 {
     on_event:entry()
@@ -94,6 +120,32 @@ Block task
                     s2resp2 == "A" ? item.picA_val : item.picB_val ;
                 output.s2_final_resp=
                     s2respfin == "A" ? item.picA_val : item.picB_val ;
+
+                output.s1_first_inter = interpretation(
+                        output.s1_first_resp,
+                        item.s1_type
+                        );
+                output.s1_final_inter = interpretation(
+                        output.s1_final_resp,
+                        item.s1_type
+                        );
+                output.s2_first_inter = interpretation(
+                        output.s2_first_resp,
+                        item.s1_type
+                        );
+                output.s2_final_inter = interpretation(
+                        output.s2_final_resp,
+                        item.s1_type
+                        );
+
+                output.s1_first_resp_i = output.s1_first_resp;
+                output.s1_final_resp_i = output.s1_final_resp;
+                output.s2_first_resp_i = output.s2_first_resp;
+                output.s2_final_resp_i = output.s2_final_resp;
+                output.s1_first_inter_i = output.s1_first_inter;
+                output.s1_final_inter_i = output.s1_final_inter;
+                output.s2_first_inter_i = output.s2_first_inter;
+                output.s2_final_inter_i = output.s2_final_inter;
 
                 output.first_response_time
                                     = test_page.response_pictures.rt_first;
@@ -212,6 +264,32 @@ Block task
                     s2resp2 == "A" ? item.picA_val : item.picB_val ;
                 output.s2_final_resp=
                     s2respfin == "A" ? item.picA_val : item.picB_val ;
+
+                output.s1_first_inter = interpretation(
+                        output.s1_first_resp,
+                        item.s1_type
+                        );
+                output.s1_final_inter = interpretation(
+                        output.s1_final_resp,
+                        item.s1_type
+                        );
+                output.s2_first_inter = interpretation(
+                        output.s2_first_resp,
+                        item.s1_type
+                        );
+                output.s2_final_inter = interpretation(
+                        output.s2_final_resp,
+                        item.s1_type
+                        );
+
+                output.s1_first_resp_i = output.s1_first_resp;
+                output.s1_final_resp_i = output.s1_final_resp;
+                output.s2_first_resp_i = output.s2_first_resp;
+                output.s2_final_resp_i = output.s2_final_resp;
+                output.s1_first_inter_i = output.s1_first_inter;
+                output.s1_final_inter_i = output.s1_final_inter;
+                output.s2_first_inter_i = output.s2_first_inter;
+                output.s2_final_inter_i = output.s2_final_inter;
 
                 output.first_response_time
                                     = test_page.response_pictures.rt_first;
