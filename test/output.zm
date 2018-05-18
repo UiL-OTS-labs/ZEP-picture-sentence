@@ -1,4 +1,12 @@
 
+// The chosen interpretation
+enum inter_t {
+    INT_NL,
+    INT_ES,
+    INT_NOT_RELEVANT
+};
+
+
 // Describes the output of each trial in the experiment.
 record TestOutput {
     int     id;                     // item id
@@ -14,6 +22,10 @@ record TestOutput {
     int     s2_first_resp;          // value of the first response on sentence 2
     int     s1_final_resp;          // value of the last response on sentence 1
     int     s2_final_resp;          // value of the last response on sentence 2
+    int     s1_first_inter;         // value of the first interpretation 1
+    int     s1_final_inter;         // value of the final interpretation 1
+    int     s2_first_inter;         // value of the first interpretation 2
+    int     s2_final_inter;         // value of the final interpretation 2
     int     first_response_time;    // rt of the first response
     int     final_response_time;    // rt of the last response
 };
