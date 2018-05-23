@@ -301,6 +301,15 @@ Block task
 
 
                 test_output_append(test_output, output);
+                if (item.type == ITEM_TARGET) {
+                    test_output_append(target_output, output);
+                }
+                if (item.type == ITEM_CONTROL) {
+                    test_output_append(control_output, output);
+                }
+                if (item.type == ITEM_FILLER) {
+                    test_output_append(filler_output, output);
+                }
             }
 
             SubTrial reading
