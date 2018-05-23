@@ -1,7 +1,7 @@
 id;item_type;fn1;fn2;s1;s2;picA_val;picB_val;s1_type;s2_type
 1;ITEM_TARGET;E_1_A;E_1_P;Martha laat het hoofd zakken;Martha laat haar hoofd zakken;PIC_ALIENABLE;PIC_NON_ALIENABLE;SEN_ARTICLE;SEN_PRONOUN
 2;ITEM_TARGET;E_2_P;E_2_A;Pedro steekt de hand op;Pedro steekt zijn hand op;PIC_NON_ALIENABLE;PIC_ALIENABLE;SEN_ARTICLE;SEN_PRONOUN
-3;ITEM_CONTROL;C_1_R;C_1_T;Pedro slaat zichzelf op de neus;Pedro slaat hem op de neus;PIC_ALIENABLE;PIC_NON_ALIENABLE;SEN_C_REFLEXIVE;SEN_C_TRANSITIVE
-4;ITEM_CONTROL;C_2_R;C_2_T;Martha trekt haar eigen tanden;Martha trekt haar tanden;PIC_NON_ALIENABLE;PIC_ALIENABLE;SEN_C_REFLEXIVE;SEN_C_TRANSITIVE
-5;ITEM_FILLER;F_1_R;F_1_T;Martha raakt zichzelf aan;Martha raakt haar aan;PIC_NON_ALIENABLE;PIC_ALIENABLE;SEN_PRONOUN;SEN_PRONOUN
-6;ITEM_FILLER;F_2_T;F_2_R;Pedro wijst naar hem;Pedro wijst naar zichzelf;PIC_NON_ALIENABLE;PIC_ALIENABLE;SEN_PRONOUN;SEN_PRONOUN
+3;ITEM_CONTROL;C_1_R;C_1_T;Pedro slaat zichzelf op de neus;Pedro slaat hem op de neus;PIC_ALIENABLE;PIC_NON_ALIENABLE;SEN_REFLEXIVE;SEN_TRANSITIVE
+4;ITEM_CONTROL;C_2_R;C_2_T;Martha trekt haar eigen tanden;Martha trekt haar tanden;PIC_NON_ALIENABLE;PIC_ALIENABLE;SEN_REFLEXIVE;SEN_TRANSITIVE
+5;ITEM_FILLER;F_1_R;F_1_T;Martha raakt zichzelf aan;Martha raakt haar aan;PIC_NON_ALIENABLE;PIC_ALIENABLE;SEN_REFLEXIVE;SEN_TRANSITIVE
+6;ITEM_FILLER;F_2_T;F_2_R;Pedro wijst naar hem;Pedro wijst naar zichzelf;PIC_NON_ALIENABLE;PIC_ALIENABLE;SEN_TRANSITIVE;SEN_REFLEXIVE

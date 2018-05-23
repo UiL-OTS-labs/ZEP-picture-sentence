@@ -3,19 +3,18 @@
 enum pic_t {
     PIC_ALIENABLE       = 1,
     PIC_NON_ALIENABLE   = 2,
-    P_CORRECT           = 3,
-    P_FALSE             = 4
+    PIC_REFLEXIVE       = 3,
+    PIC_TRANSITIVE      = 4,
+    PIC_PRACTICE        = 5
 };
 
 // sentence types used to log in output
 enum sen_t{
-    SEN_PRONOUN         = 3,
-    SEN_ARTICLE         = 4,
-    SEN_PRACTICE        = 5,
-    SEN_C_REFLEXIVE     = 6,
-    SEN_C_TRANSITIVE    = 7,
-    SEN_F_REFLEXIVE     = 8,
-    SEN_F_TRANSITIVE    = 9
+    SEN_PRONOUN         = 1,    // Target sentence with pronoun
+    SEN_ARTICLE         = 2,    // Target sentence with article
+    SEN_REFLEXIVE       = 3,    // Sentence reflexive
+    SEN_TRANSITIVE      = 4,    // Sentence transitive
+    SEN_PRACTICE        = 5,    // Sentence from the practice phase
 };
 
 enum item_type {
