@@ -19,18 +19,24 @@ void center_picture_in_canvas(CanvasGadget c, ImageShape im, string fn)
     real scaling;
     real pheight = im.actual_height;
     real pwidth  = im.actual_width;
+
     if (pwidth > pheight)
-        scaling = c.width / pwidth;
+        scaling = real(c.width) / pwidth;
     else
-        scaling = c.height / pheight;
+        scaling = real(c.height) / pheight;
 
     real scaled_width = scaling * pwidth;
     real scaled_height= scaling * pheight;
 
     if (abs(scaled_width - c.width) > 1)
         c.offset_x = (c.width - scaled_width)/2;
+    else
+        c.offset_x = 0;
+
     if (abs(scaled_height - c.height) > 1)
         c.offset_y = (c.height - scaled_height)/2;
+    else
+        c.offset_y = 0;
     
     im.scaling_x = scaling;
     im.scaling_y = scaling;
@@ -123,7 +129,7 @@ Page test_page {
                     size = 250,250;
                 }
 
-                ImageShape im
+                ImageShape im1
                 {
                 }
             }
@@ -136,7 +142,7 @@ Page test_page {
                     size = 250,250;
                 }
 
-                ImageShape im
+                ImageShape im2
                 {
                 }
 
@@ -167,22 +173,22 @@ Page test_page {
                 string name1 = stimuli_dir() + "pictures/" + fn1 + ".png";
                 string name2 = stimuli_dir() + "pictures/" + fn2 + ".png";
 
-                center_picture_in_canvas(pic1, pic1.im, name1);
-                center_picture_in_canvas(pic2, pic2.im, name2);
+                center_picture_in_canvas(pic1, pic1.im1, name1);
+                center_picture_in_canvas(pic2, pic2.im2, name2);
 
-                pic1.im.start(t);
-                pic2.im.start(t);
+                pic1.im1.start(t);
+                pic2.im2.start(t);
 
-                return pic2.im.expected_start_time;
+                return pic2.im2.expected_start_time;
             }
 
             void clear()
             {
                 is_visible = false;
-                pic1.im.abort();
-                pic2.im.abort();
-                pic1.im.is_visible = false;
-                pic2.im.is_visible = false;
+                pic1.im1.abort();
+                pic2.im2.abort();
+                pic1.im1.is_visible = false;
+                pic2.im2.is_visible = false;
             }
         }
         

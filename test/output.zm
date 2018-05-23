@@ -3,7 +3,8 @@
 enum inter_t {
     INT_NL,
     INT_ES,
-    INT_NOT_RELEVANT
+    INT_CORRECT,
+    INT_INCORRECT
 };
 
 
@@ -45,6 +46,13 @@ TestOutput[..]  prac_output;
 // Output of the test phase
 TestOutput[..]  test_output;
 
+// output Target items;
+TestOutput[..]  target_output;
+// output Control items;
+TestOutput[..]  control_output;
+// output Filler items;
+TestOutput[..]  filler_output;
+
 // Increases the size of the array by one and put the new value there.
 void test_output_append(TestOutput[] array, TestOutput output)
 {
@@ -70,4 +78,16 @@ void test_output_save()
     string fn = expdb.experiment.session.create_table(namespace_name, 2);
     test_output.append(fn, namespace_name + ": test results");
     test_output.size = 0;
+    
+    fn = expdb.experiment.session.create_table("target", 3);
+    target_output.append(fn, namespace_name + ": target results");
+    target_output.size = 0;
+    
+    fn = expdb.experiment.session.create_table("control", 4);
+    control_output.append(fn, namespace_name + ": control results");
+    control_output.size = 0;
+    
+    fn = expdb.experiment.session.create_table("filler", 5);
+    filler_output.append(fn, namespace_name + ": filler results");
+    filler_output.size = 0;
 }
