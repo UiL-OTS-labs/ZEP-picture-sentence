@@ -6,27 +6,30 @@ import test_page;
 // Returns the interpretation of the participant
 inter_t interpretation(pic_t p, sen_t s)
 {
+    inter_t retval;
     if (
             (p == PIC_ALIENABLE && s == SEN_ARTICLE) ||
             (p == PIC_NON_ALIENABLE && s == SEN_PRONOUN)
         ) {
-        return INT_NL;
+        retval = INT_NL;
     }
     else if (
             (p == PIC_NON_ALIENABLE && s == SEN_ARTICLE) ||
             (p == PIC_ALIENABLE && s == SEN_PRONOUN)
         ) {
-        return INT_ES;
+        INT_ES;
+    }
+    else if (
+            (p == PIC_REFLEXIVE && s == SEN_REFLEXIVE) ||
+            (p == PIC_TRANSITIVE && s == SEN_TRANSITIVE)
+        ) {
+        retval = INT_CORRECT;
     }
     else {
-        return INT_NOT_RELEVANT;
+        retval = INT_INCORRECT;
     }
 
-    // This is bs, because the control flow will never arrive here. 
-    // Unfortunately Zep requires it otherwise it will think the function
-    // doesn't return a value, however it will always return a value from the
-    // conditional statements above...
-    return INT_NOT_RELEVANT;
+    return retval;
 }
 
 Block task 

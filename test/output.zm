@@ -3,7 +3,8 @@
 enum inter_t {
     INT_NL,
     INT_ES,
-    INT_NOT_RELEVANT
+    INT_CORRECT,
+    INT_INCORRECT
 };
 
 
