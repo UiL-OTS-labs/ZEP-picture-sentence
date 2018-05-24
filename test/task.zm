@@ -17,7 +17,7 @@ inter_t interpretation(pic_t p, sen_t s)
             (p == PIC_NON_ALIENABLE && s == SEN_ARTICLE) ||
             (p == PIC_ALIENABLE && s == SEN_PRONOUN)
         ) {
-        INT_ES;
+        retval = INT_ES;
     }
     else if (
             (p == PIC_REFLEXIVE && s == SEN_REFLEXIVE) ||
