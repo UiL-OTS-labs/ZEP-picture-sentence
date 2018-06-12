@@ -8,8 +8,6 @@ enum TrialPhase {
     PHASE_PICTURES
 }
 
-const color ACTIVATED_COLOR = color:orange;
-
 // Given a canvas, this function tries to put the image in the center of
 // the screen in such a way that it fits precisely on the longest axis.
 // For the moment this function assumes that the Canvas is square shaped.
@@ -102,12 +100,11 @@ Page test_page {
     {
         on_event:init()
         {
-            spacing         = 10;
+            spacing         = 20;
             height          = 0;     // 0 means as big as possible
             is_visible      = true;
             top_margin      = 60;
             bottom_margin   = 60;
-            //options = LAYOUT_SHRINK_ITEMS_VER; 
         }
 
         HorGridLayout pictures
@@ -115,7 +112,7 @@ Page test_page {
             on_event:init()
             {
                 hor_spacing = 100;
-                ver_spacing = 10;
+                ver_spacing = 20;
                 width       = 0;     // 0 means as big as possible
                 wrap_count  = 2;
                 options     = LAYOUT_SHRINK_ITEMS;
@@ -126,7 +123,7 @@ Page test_page {
                 on_event:init()
                 {
                     fill_pattern_color = TEST_PAGE_STIMULUS_COLOR;
-                    size = 250,250;
+                    size = 350,350;
                 }
 
                 ImageShape im1
@@ -139,7 +136,7 @@ Page test_page {
                 on_event:init()
                 {
                     fill_pattern_color = TEST_PAGE_STIMULUS_COLOR;
-                    size = 250,250;
+                    size = 350,350;
                 }
 
                 ImageShape im2
@@ -281,94 +278,6 @@ Page test_page {
         }
 
         Spacer {}
-
-        CanvasGadget s2
-        {
-            on_event:init()
-            {
-                fill_pattern_color  = TEST_PAGE_STIMULUS_COLOR;
-                size = LINE_WIDTH,50;
-            }
-            
-            TextShape text
-            {
-                on_event:init()
-                {
-//                    size = LINE_WIDTH,100;
-                    font_family         = TEST_PAGE_STIMULUS_FONT_FAMILY;
-                    font_size           = TEST_PAGE_STIMULUS_FONT_SIZE;
-                    line_pattern_color  = TEST_PAGE_STIMULUS_TEXT_COLOR;
-                    line_width          = LINE_WIDTH;
-                }
-            }
-            
-            time enable_sentence(string s, time t, dur d=-1ms)
-            {
-                text.text = s;
-                text.start(t, d);
-                return text.expected_start_time;
-            }
-            
-            void clear()
-            {
-                text.abort();
-                text.is_visible = false;
-            }
-            
-        }
-
-        HorizontalLayout buttons_s2
-        {
-            on_event:init()
-            {
-                spacing = 300;
-                width = 0;     // 0 means as big as possible
-                //options = LAYOUT_SPREAD_ITEMS;
-            }
-            
-            ButtonGadget button_a
-            {
-                on_event:init()
-                {
-                    text = "A";
-                    fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
-                    font_family = TEST_PAGE_BUTTON_FONT_FAMILY;
-                    font_size = TEST_PAGE_BUTTON_FONT_SIZE;
-                    width = 100;
-                }
-
-                on_event:activate()
-                {
-                    response_pictures.process_hit(event_time, 1);
-                }
-            }
-            
-            ButtonGadget button_b
-            {
-                on_event:init()
-                {
-                    text = "B";
-                    fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
-                    font_family = TEST_PAGE_BUTTON_FONT_FAMILY;
-                    font_size = TEST_PAGE_BUTTON_FONT_SIZE;
-                    width = 100;
-                }
-
-                on_event:activate()
-                {
-                    response_pictures.process_hit(event_time, 2);
-                }
-            }
-
-            void clear()
-            {
-                is_visible = false;
-                button_a.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
-                button_b.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
-            }
-        }
-
-        Spacer {}
         
         ButtonGadget continue_button
         {
@@ -386,14 +295,12 @@ Page test_page {
             }
         }
 
-        time enable_sentences(string s1, string s2, time onset)
+        time enable_sentences(string s1, time onset)
         {
             time t = layout.s1.enable_sentence(s1, onset);
-            layout.s2.enable_sentence(s2, onset);
 
             layout.pictures.is_visible      = false;
             layout.buttons_s1.is_visible    = false;
-            layout.buttons_s2.is_visible    = false;
 
             return t;
         }
@@ -402,7 +309,6 @@ Page test_page {
         {
             layout.pictures.is_visible      = true;
             layout.buttons_s1.is_visible    = true;
-            layout.buttons_s2.is_visible    = true;
 
             return layout.pictures.display_pictures(fn1, fn2, onset);
         }
@@ -412,8 +318,6 @@ Page test_page {
             pictures.clear();
             s1.clear();
             buttons_s1.clear();
-            s2.clear();
-            buttons_s2.clear();
 
             continue_button.is_visible = false;
         }
@@ -461,8 +365,6 @@ Page test_page {
 
         string  s1_resp_first; // First response on the first sentence
         string  s1_resp_last;  // last response on the first sentence
-        string  s2_resp_first; // First response on the 2nd sentence
-        string  s2_resp_last;  // last response on the 2nd sentence
 
         void clear()
         {
@@ -471,8 +373,6 @@ Page test_page {
 
             s1_resp_first = "";
             s1_resp_last  = "";
-            s2_resp_first = "";
-            s2_resp_last  = "";
         }
 
         void process_hit(time t, int value)
@@ -488,31 +388,18 @@ Page test_page {
 
                 if (value == 0 || value == 2) {
                     ans1 = "A";
-                    ans2 = "B";
-
-                    layout.buttons_s1.button_a.fill_pattern_color = ACTIVATED_COLOR;
-                    layout.buttons_s1.button_b.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
-                    layout.buttons_s2.button_a.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
-                    layout.buttons_s2.button_b.fill_pattern_color = ACTIVATED_COLOR;
                 }
                 else {
                     ans1 = "B";
-                    ans2 = "A";
-
-                    layout.buttons_s1.button_a.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
-                    layout.buttons_s1.button_b.fill_pattern_color = ACTIVATED_COLOR;
-                    layout.buttons_s2.button_a.fill_pattern_color = ACTIVATED_COLOR;
-                    layout.buttons_s2.button_b.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
                 }
 
                 if (rt_first < 0) {
                     rt_first        = rt;
                     s1_resp_first   = ans1;
-                    s2_resp_first   = ans2;
                 }
+
                 rt_last      = rt;
                 s1_resp_last = ans1;
-                s2_resp_last = ans2;
             }
             else if(
                 validity == HIT_IGNORED   ||
@@ -581,7 +468,7 @@ Page test_page {
 
         tref = test_window1.show_test_page(this, reftime + INTER_TRIAL_INTERVAL);
 
-        layout.enable_sentences(item.s1, item.s2, tref);
+        layout.enable_sentences(item.s1, tref);
 
         test_page_overlay.update_progress_bar(cycle);
 
