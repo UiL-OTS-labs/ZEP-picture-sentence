@@ -37,9 +37,7 @@ record TestItem {
 
 
 TestItem[..] prac_items;
-TestItem[..] test_items;
-TestItem[..] test_items_bl1;
-TestItem[..] test_items_bl2;
+TestItem[..][..] test_items;
 
 int load_stimuli()
 {
