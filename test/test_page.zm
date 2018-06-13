@@ -66,14 +66,10 @@ Page test_page {
                     done(CONTINUE);
                 }
             }
-            else if (input_key == 'a' || input_key == 'A')
-                response_pictures.process_hit(event_time, 0);
             else if (input_key == 'z' || input_key == 'Z')
-                response_pictures.process_hit(event_time, 1);
+                response_pictures.process_hit(event_time, 0);
             else if (input_key == 'm' || input_key == 'M')
-                response_pictures.process_hit(event_time, 2);
-            else if (input_key == 'k' || input_key == 'K')
-                response_pictures.process_hit(event_time, 3);
+                response_pictures.process_hit(event_time, 1);
         }
     }
 
@@ -265,7 +261,7 @@ Page test_page {
 
                 on_event:activate()
                 {
-                    response_pictures.process_hit(event_time, 3);
+                    response_pictures.process_hit(event_time, 1);
                 }
             }
 
@@ -361,18 +357,12 @@ Page test_page {
     Response response_pictures
     {
         int     rt_first;       // first reaction time
-        int     rt_last;        // last reaction time
-
-        string  s1_resp_first; // First response on the first sentence
-        string  s1_resp_last;  // last response on the first sentence
+        string  s1_resp_first;  // First response on the first sentence
 
         void clear()
         {
             rt_first = -9999;
-            rt_last  = -9999;
-
             s1_resp_first = "";
-            s1_resp_last  = "";
         }
 
         void process_hit(time t, int value)
@@ -384,22 +374,24 @@ Page test_page {
                 layout.continue_button.is_visible = true;
                 int rt = int(reaction_time(num_valid_hits - 1));
                 string ans1;
-                string ans2;
 
-                if (value == 0 || value == 2) {
+                if (value == 0) {
                     ans1 = "A";
                 }
-                else {
+                else if (value == 1) {
                     ans1 = "B";
                 }
-
-                if (rt_first < 0) {
-                    rt_first        = rt;
-                    s1_resp_first   = ans1;
+                else {
+                    print_error(
+                        "Unexpected response value contact tech support,\n"
+                        "because this should not happen.\n"
+                        );
                 }
 
-                rt_last      = rt;
-                s1_resp_last = ans1;
+                rt_first        = rt;
+                s1_resp_first   = ans1;
+
+                stop();
             }
             else if(
                 validity == HIT_IGNORED   ||

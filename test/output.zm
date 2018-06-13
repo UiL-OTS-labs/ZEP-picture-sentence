@@ -18,17 +18,12 @@ record TestOutput {
     string  s1;                     // first sentence
     int     s1_type;                // the type of the sentence 1
     pic_t   s1_first_resp;          // value of the first response on sentence 1
-    pic_t   s1_final_resp;          // value of the last response on sentence 1
     inter_t s1_first_inter;         // value of the first interpretation 1
-    inter_t s1_final_inter;         // value of the final interpretation 1
 
     int     s1_first_resp_i;        // value of the first response on sentence 1
-    int     s1_final_resp_i;        // value of the last response on sentence 1
     int     s1_first_inter_i;       // value of the first interpretation 1
-    int     s1_final_inter_i;       // value of the final interpretation 1
 
     int     first_response_time;    // rt of the first response
-    int     final_response_time;    // rt of the last response
 };
 
 // Output of the practice phase
