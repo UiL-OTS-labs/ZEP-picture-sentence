@@ -102,7 +102,6 @@ Block task
                 output.type     = item.type;
 
                 string s1resp1   = test_page.response_pictures.s1_resp_first;
-                string s1respfin = test_page.response_pictures.s1_resp_last;
 
                 output.reading_time = int(test_page.response_sentences.rt);
                 output.fn1          = item.fn1;
@@ -113,27 +112,17 @@ Block task
 
                 output.s1_first_resp=
                     s1resp1 == "A" ? item.picA_val : item.picB_val ;
-                output.s1_final_resp=
-                    s1respfin == "A" ? item.picA_val : item.picB_val ;
 
                 output.s1_first_inter = interpretation(
                         output.s1_first_resp,
                         item.s1_type
                         );
-                output.s1_final_inter = interpretation(
-                        output.s1_final_resp,
-                        item.s1_type
-                        );
 
                 output.s1_first_resp_i = output.s1_first_resp;
-                output.s1_final_resp_i = output.s1_final_resp;
                 output.s1_first_inter_i = output.s1_first_inter;
-                output.s1_final_inter_i = output.s1_final_inter;
 
                 output.first_response_time
                                     = test_page.response_pictures.rt_first;
-                output.final_response_time
-                                    = test_page.response_pictures.rt_last;
 
                 test_output_append(prac_output, output);
             }
@@ -226,7 +215,6 @@ Block task
                 output.type     = item.type;
 
                 string s1resp1   = test_page.response_pictures.s1_resp_first;
-                string s1respfin = test_page.response_pictures.s1_resp_last;
 
                 output.reading_time = int(test_page.response_sentences.rt);
                 output.fn1          = item.fn1;
@@ -237,28 +225,17 @@ Block task
 
                 output.s1_first_resp=
                     s1resp1 == "A" ? item.picA_val : item.picB_val ;
-                output.s1_final_resp=
-                    s1respfin == "A" ? item.picA_val : item.picB_val ;
 
                 output.s1_first_inter = interpretation(
                         output.s1_first_resp,
                         item.s1_type
                         );
-                output.s1_final_inter = interpretation(
-                        output.s1_final_resp,
-                        item.s1_type
-                        );
 
                 output.s1_first_resp_i = output.s1_first_resp;
-                output.s1_final_resp_i = output.s1_final_resp;
                 output.s1_first_inter_i = output.s1_first_inter;
-                output.s1_final_inter_i = output.s1_final_inter;
 
                 output.first_response_time
                                     = test_page.response_pictures.rt_first;
-                output.final_response_time
-                                    = test_page.response_pictures.rt_last;
-
 
                 test_output_append(test_output, output);
                 if (item.type == ITEM_TARGET) {

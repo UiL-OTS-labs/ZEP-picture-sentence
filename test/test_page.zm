@@ -490,7 +490,7 @@ Page test_page {
         layout.enable_pictures(item.fn1, item.fn2 , tref);
         
         response_pictures.clear();
-        response_pictures.start(tref);
+        response_pictures.start(tref, PICTURE_RESPONSE_DURATION);
         
         phase = PHASE_PICTURES;
         
