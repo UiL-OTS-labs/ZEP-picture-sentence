@@ -27,14 +27,14 @@ void center_picture_in_canvas(CanvasGadget c, ImageShape im, string fn)
     real scaled_height= scaling * pheight;
 
     if (abs(scaled_width - c.width) > 1)
-        c.offset_x = (c.width - scaled_width)/2;
+        im.offset_x = (c.width - scaled_width)/2;
     else
-        c.offset_x = 0;
+        im.offset_x = 0;
 
     if (abs(scaled_height - c.height) > 1)
-        c.offset_y = (c.height - scaled_height)/2;
+        im.offset_y = (c.height - scaled_height)/2;
     else
-        c.offset_y = 0;
+        im.offset_y = 0;
     
     im.scaling_x = scaling;
     im.scaling_y = scaling;
@@ -96,7 +96,7 @@ Page test_page {
     {
         on_event:init()
         {
-            spacing         = 20;
+            spacing         = 50;
             height          = 0;     // 0 means as big as possible
             is_visible      = true;
             top_margin      = 60;
@@ -125,6 +125,29 @@ Page test_page {
                 ImageShape im1
                 {
                 }
+
+                RectangleShape fb
+                {
+                    on_event:init()
+                    {
+                        width = pic1.width;
+                        height= pic1.height;
+                        line_pattern_color = color:green;
+                        line_width = 20;
+                    }
+
+                    void animate(time t, dur d, color c)
+                    {
+                        line_pattern_color = c;
+                        start(t, d);
+                    }
+
+                    // finishes trial
+                    on_event:finish()
+                    {
+                        done(CONTINUE);
+                    }
+                }
             }
             
             CanvasGadget pic2
@@ -139,6 +162,22 @@ Page test_page {
                 {
                 }
 
+                RectangleShape fb
+                {
+                    on_event:init()
+                    {
+                        width = pic2.width;
+                        height= pic2.height;
+                        line_pattern_color = color:green;
+                        line_width = 20;
+                    }
+
+                    void animate(time t, dur d, color c)
+                    {
+                        line_pattern_color = c;
+                        start(t, d);
+                    }
+                }
             }
 
             LabelGadget label1
@@ -175,6 +214,28 @@ Page test_page {
                 return pic2.im2.expected_start_time;
             }
 
+            time display_feedback(
+                    string response,
+                    time t,
+                    dur fbdur
+                    )
+            {
+                if (response == "A") {
+                    pic1.fb.animate(t, fbdur, color:green);
+                    pic2.fb.animate(t, fbdur, rgbi:0/0/0/0);
+                }
+                else if (response == "B") {
+                    pic1.fb.animate(t, fbdur, rgbi:0/0/0/0);
+                    pic2.fb.animate(t, fbdur, color:green);
+                }
+                else {
+                    pic1.fb.animate(t, fbdur, rgbi:0/0/0/0);
+                    pic1.fb.animate(t, fbdur, rgbi:0/0/0/0);
+                }
+
+                return pic2.fb.expected_start_time;
+            }
+
             void clear()
             {
                 is_visible = false;
@@ -182,11 +243,13 @@ Page test_page {
                 pic2.im2.abort();
                 pic1.im1.is_visible = false;
                 pic2.im2.is_visible = false;
+                pic1.fb.abort();
+                pic2.fb.abort();
+                pic1.fb.is_visible = false;
+                pic2.fb.is_visible = false;
             }
         }
         
-        Spacer {}
-
         CanvasGadget s1
         {
             on_event:init()
@@ -273,24 +336,6 @@ Page test_page {
             }
         }
 
-        Spacer {}
-        
-        ButtonGadget continue_button
-        {
-            on_event:init()
-            {
-                text = CONTINUE_BUTTON_TEXT;
-                font_family = TEST_PAGE_BUTTON_FONT_FAMILY;
-                font_size = TEST_PAGE_BUTTON_FONT_SIZE;
-                is_visible = false;
-            }
-
-            on_event:activate()
-            {
-                done(CONTINUE);
-            }
-        }
-
         time enable_sentences(string s1, time onset)
         {
             time t = layout.s1.enable_sentence(s1, onset);
@@ -314,8 +359,6 @@ Page test_page {
             pictures.clear();
             s1.clear();
             buttons_s1.clear();
-
-            continue_button.is_visible = false;
         }
     }
 
@@ -371,7 +414,6 @@ Page test_page {
 
             if (validity == HIT_VALID)
             {
-                layout.continue_button.is_visible = true;
                 int rt = int(reaction_time(num_valid_hits - 1));
                 string ans1;
 
@@ -391,6 +433,8 @@ Page test_page {
                 rt_first        = rt;
                 s1_resp_first   = ans1;
 
+                ignore_remaining_hits();
+
                 stop();
             }
             else if(
@@ -399,8 +443,18 @@ Page test_page {
                 validity == HIT_IGNORED
                 ) // handle these when there is need for
             {
-                println("Invalid Hit" + validity);
+                println("Invalid Hit " + validity);
             }
+
+        }
+
+        on_event:finish()
+        {
+            layout.pictures.display_feedback(
+                s1_resp_first,
+                event_time,
+                FEEDBACK_DUR
+                );
         }
 
         bool has_responded()
@@ -458,7 +512,10 @@ Page test_page {
         time tref;
         this.item = item;
 
-        tref = test_window1.show_test_page(this, reftime + INTER_TRIAL_INTERVAL);
+        tref = test_window1.show_test_page(
+                this,
+                reftime + INTER_TRIAL_INTERVAL
+                );
 
         layout.enable_sentences(item.s1, tref);
 

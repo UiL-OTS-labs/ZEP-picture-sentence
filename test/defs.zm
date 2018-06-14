@@ -1,8 +1,11 @@
 
 // the duration between two consecutive trials.
-const dur   INTER_TRIAL_INTERVAL = 500ms;
+const dur   INTER_TRIAL_INTERVAL = 1000ms;
 
 // The duration the response is active, if set to 0s or 0 ms, the
 // response duration is infinite.
 const dur   PICTURE_RESPONSE_DURATION = 4s;
+
+// Duration of the visual feedback
+const dur   FEEDBACK_DUR = 250ms;
 
