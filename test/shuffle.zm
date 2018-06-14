@@ -13,9 +13,9 @@ int shuffle_stimuli()
 
     while (i < NATTEMPTS && !succeeded) {
         //println("Shuffle attempt = " + (i + 1));
-        test_items.shuffle(0, -1);
+        test_items[selected_group].shuffle(0, -1);
 
-        succeeded = check_item_order(test_items);
+        succeeded = check_item_order(test_items[selected_group]);
         //dump_test_items(test_items);
         if (succeeded)
             break;

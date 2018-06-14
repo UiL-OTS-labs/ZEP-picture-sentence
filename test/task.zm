@@ -102,58 +102,27 @@ Block task
                 output.type     = item.type;
 
                 string s1resp1   = test_page.response_pictures.s1_resp_first;
-                string s1respfin = test_page.response_pictures.s1_resp_last;
-                string s2resp2   = test_page.response_pictures.s2_resp_first;
-                string s2respfin = test_page.response_pictures.s2_resp_last;
 
                 output.reading_time = int(test_page.response_sentences.rt);
                 output.fn1          = item.fn1;
                 output.fn2          = item.fn2;
                 output.s1           = item.s1;
-                output.s2           = item.s2;
 
                 output.s1_type      = item.s1_type;
-                output.s2_type      = item.s2_type;
 
                 output.s1_first_resp=
                     s1resp1 == "A" ? item.picA_val : item.picB_val ;
-                output.s1_final_resp=
-                    s1respfin == "A" ? item.picA_val : item.picB_val ;
-                output.s2_first_resp=
-                    s2resp2 == "A" ? item.picA_val : item.picB_val ;
-                output.s2_final_resp=
-                    s2respfin == "A" ? item.picA_val : item.picB_val ;
 
                 output.s1_first_inter = interpretation(
                         output.s1_first_resp,
                         item.s1_type
                         );
-                output.s1_final_inter = interpretation(
-                        output.s1_final_resp,
-                        item.s1_type
-                        );
-                output.s2_first_inter = interpretation(
-                        output.s2_first_resp,
-                        item.s2_type
-                        );
-                output.s2_final_inter = interpretation(
-                        output.s2_final_resp,
-                        item.s2_type
-                        );
 
                 output.s1_first_resp_i = output.s1_first_resp;
-                output.s1_final_resp_i = output.s1_final_resp;
-                output.s2_first_resp_i = output.s2_first_resp;
-                output.s2_final_resp_i = output.s2_final_resp;
                 output.s1_first_inter_i = output.s1_first_inter;
-                output.s1_final_inter_i = output.s1_final_inter;
-                output.s2_first_inter_i = output.s2_first_inter;
-                output.s2_final_inter_i = output.s2_final_inter;
 
                 output.first_response_time
                                     = test_page.response_pictures.rt_first;
-                output.final_response_time
-                                    = test_page.response_pictures.rt_last;
 
                 test_output_append(prac_output, output);
             }
@@ -219,7 +188,7 @@ Block task
     {
         on_event:entry()
         {
-            num_cycles = test_items.size;
+            num_cycles = test_items[selected_group].size;
             test_page.setup(num_cycles, true);
         }
 
@@ -235,7 +204,7 @@ Block task
 
             on_event:entry()
             {
-                item = test_items[test.cycle];
+                item = test_items[selected_group][test.cycle];
             }
 
             on_event:exit()
@@ -246,59 +215,27 @@ Block task
                 output.type     = item.type;
 
                 string s1resp1   = test_page.response_pictures.s1_resp_first;
-                string s1respfin = test_page.response_pictures.s1_resp_last;
-                string s2resp2   = test_page.response_pictures.s2_resp_first;
-                string s2respfin = test_page.response_pictures.s2_resp_last;
 
                 output.reading_time = int(test_page.response_sentences.rt);
                 output.fn1          = item.fn1;
                 output.fn2          = item.fn2;
                 output.s1           = item.s1;
-                output.s2           = item.s2;
 
                 output.s1_type      = item.s1_type;
-                output.s2_type      = item.s2_type;
 
                 output.s1_first_resp=
                     s1resp1 == "A" ? item.picA_val : item.picB_val ;
-                output.s1_final_resp=
-                    s1respfin == "A" ? item.picA_val : item.picB_val ;
-                output.s2_first_resp=
-                    s2resp2 == "A" ? item.picA_val : item.picB_val ;
-                output.s2_final_resp=
-                    s2respfin == "A" ? item.picA_val : item.picB_val ;
 
                 output.s1_first_inter = interpretation(
                         output.s1_first_resp,
                         item.s1_type
                         );
-                output.s1_final_inter = interpretation(
-                        output.s1_final_resp,
-                        item.s1_type
-                        );
-                output.s2_first_inter = interpretation(
-                        output.s2_first_resp,
-                        item.s2_type
-                        );
-                output.s2_final_inter = interpretation(
-                        output.s2_final_resp,
-                        item.s2_type
-                        );
 
                 output.s1_first_resp_i = output.s1_first_resp;
-                output.s1_final_resp_i = output.s1_final_resp;
-                output.s2_first_resp_i = output.s2_first_resp;
-                output.s2_final_resp_i = output.s2_final_resp;
                 output.s1_first_inter_i = output.s1_first_inter;
-                output.s1_final_inter_i = output.s1_final_inter;
-                output.s2_first_inter_i = output.s2_first_inter;
-                output.s2_final_inter_i = output.s2_final_inter;
 
                 output.first_response_time
                                     = test_page.response_pictures.rt_first;
-                output.final_response_time
-                                    = test_page.response_pictures.rt_last;
-
 
                 test_output_append(test_output, output);
                 if (item.type == ITEM_TARGET) {

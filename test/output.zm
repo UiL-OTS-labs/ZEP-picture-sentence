@@ -16,29 +16,14 @@ record TestOutput {
     string  fn1;                    // filename of first picture
     string  fn2;                    // filename of 2nd picture
     string  s1;                     // first sentence
-    string  s2;                     // 2nd sentence
     int     s1_type;                // the type of the sentence 1
-    int     s2_type;                // the type of the sentence 2
     pic_t   s1_first_resp;          // value of the first response on sentence 1
-    pic_t   s2_first_resp;          // value of the first response on sentence 2
-    pic_t   s1_final_resp;          // value of the last response on sentence 1
-    pic_t   s2_final_resp;          // value of the last response on sentence 2
     inter_t s1_first_inter;         // value of the first interpretation 1
-    inter_t s1_final_inter;         // value of the final interpretation 1
-    inter_t s2_first_inter;         // value of the first interpretation 2
-    inter_t s2_final_inter;         // value of the final interpretation 2
 
     int     s1_first_resp_i;        // value of the first response on sentence 1
-    int     s2_first_resp_i;        // value of the first response on sentence 2
-    int     s1_final_resp_i;        // value of the last response on sentence 1
-    int     s2_final_resp_i;        // value of the last response on sentence 2
     int     s1_first_inter_i;       // value of the first interpretation 1
-    int     s1_final_inter_i;       // value of the final interpretation 1
-    int     s2_first_inter_i;       // value of the first interpretation 2
-    int     s2_final_inter_i;       // value of the final interpretation 2
 
     int     first_response_time;    // rt of the first response
-    int     final_response_time;    // rt of the last response
 };
 
 // Output of the practice phase

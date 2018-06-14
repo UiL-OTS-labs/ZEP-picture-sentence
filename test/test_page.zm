@@ -8,8 +8,6 @@ enum TrialPhase {
     PHASE_PICTURES
 }
 
-const color ACTIVATED_COLOR = color:orange;
-
 // Given a canvas, this function tries to put the image in the center of
 // the screen in such a way that it fits precisely on the longest axis.
 // For the moment this function assumes that the Canvas is square shaped.
@@ -29,14 +27,14 @@ void center_picture_in_canvas(CanvasGadget c, ImageShape im, string fn)
     real scaled_height= scaling * pheight;
 
     if (abs(scaled_width - c.width) > 1)
-        c.offset_x = (c.width - scaled_width)/2;
+        im.offset_x = (c.width - scaled_width)/2;
     else
-        c.offset_x = 0;
+        im.offset_x = 0;
 
     if (abs(scaled_height - c.height) > 1)
-        c.offset_y = (c.height - scaled_height)/2;
+        im.offset_y = (c.height - scaled_height)/2;
     else
-        c.offset_y = 0;
+        im.offset_y = 0;
     
     im.scaling_x = scaling;
     im.scaling_y = scaling;
@@ -68,14 +66,10 @@ Page test_page {
                     done(CONTINUE);
                 }
             }
-            else if (input_key == 'a' || input_key == 'A')
-                response_pictures.process_hit(event_time, 0);
             else if (input_key == 'z' || input_key == 'Z')
-                response_pictures.process_hit(event_time, 1);
+                response_pictures.process_hit(event_time, 0);
             else if (input_key == 'm' || input_key == 'M')
-                response_pictures.process_hit(event_time, 2);
-            else if (input_key == 'k' || input_key == 'K')
-                response_pictures.process_hit(event_time, 3);
+                response_pictures.process_hit(event_time, 1);
         }
     }
 
@@ -102,12 +96,11 @@ Page test_page {
     {
         on_event:init()
         {
-            spacing         = 10;
+            spacing         = 50;
             height          = 0;     // 0 means as big as possible
             is_visible      = true;
             top_margin      = 60;
             bottom_margin   = 60;
-            //options = LAYOUT_SHRINK_ITEMS_VER; 
         }
 
         HorGridLayout pictures
@@ -115,7 +108,7 @@ Page test_page {
             on_event:init()
             {
                 hor_spacing = 100;
-                ver_spacing = 10;
+                ver_spacing = 20;
                 width       = 0;     // 0 means as big as possible
                 wrap_count  = 2;
                 options     = LAYOUT_SHRINK_ITEMS;
@@ -126,11 +119,34 @@ Page test_page {
                 on_event:init()
                 {
                     fill_pattern_color = TEST_PAGE_STIMULUS_COLOR;
-                    size = 250,250;
+                    size = 350,350;
                 }
 
                 ImageShape im1
                 {
+                }
+
+                RectangleShape fb
+                {
+                    on_event:init()
+                    {
+                        width = pic1.width;
+                        height= pic1.height;
+                        line_pattern_color = color:green;
+                        line_width = 20;
+                    }
+
+                    void animate(time t, dur d, color c)
+                    {
+                        line_pattern_color = c;
+                        start(t, d);
+                    }
+
+                    // finishes trial
+                    on_event:finish()
+                    {
+                        done(CONTINUE);
+                    }
                 }
             }
             
@@ -139,13 +155,29 @@ Page test_page {
                 on_event:init()
                 {
                     fill_pattern_color = TEST_PAGE_STIMULUS_COLOR;
-                    size = 250,250;
+                    size = 350,350;
                 }
 
                 ImageShape im2
                 {
                 }
 
+                RectangleShape fb
+                {
+                    on_event:init()
+                    {
+                        width = pic2.width;
+                        height= pic2.height;
+                        line_pattern_color = color:green;
+                        line_width = 20;
+                    }
+
+                    void animate(time t, dur d, color c)
+                    {
+                        line_pattern_color = c;
+                        start(t, d);
+                    }
+                }
             }
 
             LabelGadget label1
@@ -182,6 +214,28 @@ Page test_page {
                 return pic2.im2.expected_start_time;
             }
 
+            time display_feedback(
+                    string response,
+                    time t,
+                    dur fbdur
+                    )
+            {
+                if (response == "A") {
+                    pic1.fb.animate(t, fbdur, color:green);
+                    pic2.fb.animate(t, fbdur, rgbi:0/0/0/0);
+                }
+                else if (response == "B") {
+                    pic1.fb.animate(t, fbdur, rgbi:0/0/0/0);
+                    pic2.fb.animate(t, fbdur, color:green);
+                }
+                else {
+                    pic1.fb.animate(t, fbdur, rgbi:0/0/0/0);
+                    pic1.fb.animate(t, fbdur, rgbi:0/0/0/0);
+                }
+
+                return pic2.fb.expected_start_time;
+            }
+
             void clear()
             {
                 is_visible = false;
@@ -189,11 +243,13 @@ Page test_page {
                 pic2.im2.abort();
                 pic1.im1.is_visible = false;
                 pic2.im2.is_visible = false;
+                pic1.fb.abort();
+                pic2.fb.abort();
+                pic1.fb.is_visible = false;
+                pic2.fb.is_visible = false;
             }
         }
         
-        Spacer {}
-
         CanvasGadget s1
         {
             on_event:init()
@@ -268,97 +324,9 @@ Page test_page {
 
                 on_event:activate()
                 {
-                    response_pictures.process_hit(event_time, 3);
-                }
-            }
-
-            void clear()
-            {
-                is_visible = false;
-                button_a.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
-                button_b.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
-            }
-        }
-
-        Spacer {}
-
-        CanvasGadget s2
-        {
-            on_event:init()
-            {
-                fill_pattern_color  = TEST_PAGE_STIMULUS_COLOR;
-                size = LINE_WIDTH,50;
-            }
-            
-            TextShape text
-            {
-                on_event:init()
-                {
-//                    size = LINE_WIDTH,100;
-                    font_family         = TEST_PAGE_STIMULUS_FONT_FAMILY;
-                    font_size           = TEST_PAGE_STIMULUS_FONT_SIZE;
-                    line_pattern_color  = TEST_PAGE_STIMULUS_TEXT_COLOR;
-                    line_width          = LINE_WIDTH;
-                }
-            }
-            
-            time enable_sentence(string s, time t, dur d=-1ms)
-            {
-                text.text = s;
-                text.start(t, d);
-                return text.expected_start_time;
-            }
-            
-            void clear()
-            {
-                text.abort();
-                text.is_visible = false;
-            }
-            
-        }
-
-        HorizontalLayout buttons_s2
-        {
-            on_event:init()
-            {
-                spacing = 300;
-                width = 0;     // 0 means as big as possible
-                //options = LAYOUT_SPREAD_ITEMS;
-            }
-            
-            ButtonGadget button_a
-            {
-                on_event:init()
-                {
-                    text = "A";
-                    fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
-                    font_family = TEST_PAGE_BUTTON_FONT_FAMILY;
-                    font_size = TEST_PAGE_BUTTON_FONT_SIZE;
-                    width = 100;
-                }
-
-                on_event:activate()
-                {
                     response_pictures.process_hit(event_time, 1);
                 }
             }
-            
-            ButtonGadget button_b
-            {
-                on_event:init()
-                {
-                    text = "B";
-                    fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
-                    font_family = TEST_PAGE_BUTTON_FONT_FAMILY;
-                    font_size = TEST_PAGE_BUTTON_FONT_SIZE;
-                    width = 100;
-                }
-
-                on_event:activate()
-                {
-                    response_pictures.process_hit(event_time, 2);
-                }
-            }
 
             void clear()
             {
@@ -368,32 +336,12 @@ Page test_page {
             }
         }
 
-        Spacer {}
-        
-        ButtonGadget continue_button
-        {
-            on_event:init()
-            {
-                text = CONTINUE_BUTTON_TEXT;
-                font_family = TEST_PAGE_BUTTON_FONT_FAMILY;
-                font_size = TEST_PAGE_BUTTON_FONT_SIZE;
-                is_visible = false;
-            }
-
-            on_event:activate()
-            {
-                done(CONTINUE);
-            }
-        }
-
-        time enable_sentences(string s1, string s2, time onset)
+        time enable_sentences(string s1, time onset)
         {
             time t = layout.s1.enable_sentence(s1, onset);
-            layout.s2.enable_sentence(s2, onset);
 
             layout.pictures.is_visible      = false;
             layout.buttons_s1.is_visible    = false;
-            layout.buttons_s2.is_visible    = false;
 
             return t;
         }
@@ -402,7 +350,6 @@ Page test_page {
         {
             layout.pictures.is_visible      = true;
             layout.buttons_s1.is_visible    = true;
-            layout.buttons_s2.is_visible    = true;
 
             return layout.pictures.display_pictures(fn1, fn2, onset);
         }
@@ -412,10 +359,6 @@ Page test_page {
             pictures.clear();
             s1.clear();
             buttons_s1.clear();
-            s2.clear();
-            buttons_s2.clear();
-
-            continue_button.is_visible = false;
         }
     }
 
@@ -457,22 +400,12 @@ Page test_page {
     Response response_pictures
     {
         int     rt_first;       // first reaction time
-        int     rt_last;        // last reaction time
-
-        string  s1_resp_first; // First response on the first sentence
-        string  s1_resp_last;  // last response on the first sentence
-        string  s2_resp_first; // First response on the 2nd sentence
-        string  s2_resp_last;  // last response on the 2nd sentence
+        string  s1_resp_first;  // First response on the first sentence
 
         void clear()
         {
             rt_first = -9999;
-            rt_last  = -9999;
-
             s1_resp_first = "";
-            s1_resp_last  = "";
-            s2_resp_first = "";
-            s2_resp_last  = "";
         }
 
         void process_hit(time t, int value)
@@ -481,38 +414,28 @@ Page test_page {
 
             if (validity == HIT_VALID)
             {
-                layout.continue_button.is_visible = true;
                 int rt = int(reaction_time(num_valid_hits - 1));
                 string ans1;
-                string ans2;
 
-                if (value == 0 || value == 2) {
+                if (value == 0) {
                     ans1 = "A";
-                    ans2 = "B";
-
-                    layout.buttons_s1.button_a.fill_pattern_color = ACTIVATED_COLOR;
-                    layout.buttons_s1.button_b.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
-                    layout.buttons_s2.button_a.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
-                    layout.buttons_s2.button_b.fill_pattern_color = ACTIVATED_COLOR;
+                }
+                else if (value == 1) {
+                    ans1 = "B";
                 }
                 else {
-                    ans1 = "B";
-                    ans2 = "A";
-
-                    layout.buttons_s1.button_a.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
-                    layout.buttons_s1.button_b.fill_pattern_color = ACTIVATED_COLOR;
-                    layout.buttons_s2.button_a.fill_pattern_color = ACTIVATED_COLOR;
-                    layout.buttons_s2.button_b.fill_pattern_color = TEST_PAGE_BUTTON_COLOR;
+                    print_error(
+                        "Unexpected response value contact tech support,\n"
+                        "because this should not happen.\n"
+                        );
                 }
 
-                if (rt_first < 0) {
-                    rt_first        = rt;
-                    s1_resp_first   = ans1;
-                    s2_resp_first   = ans2;
-                }
-                rt_last      = rt;
-                s1_resp_last = ans1;
-                s2_resp_last = ans2;
+                rt_first        = rt;
+                s1_resp_first   = ans1;
+
+                ignore_remaining_hits();
+
+                stop();
             }
             else if(
                 validity == HIT_IGNORED   ||
@@ -520,8 +443,18 @@ Page test_page {
                 validity == HIT_IGNORED
                 ) // handle these when there is need for
             {
-                println("Invalid Hit" + validity);
+                println("Invalid Hit " + validity);
             }
+
+        }
+
+        on_event:finish()
+        {
+            layout.pictures.display_feedback(
+                s1_resp_first,
+                event_time,
+                FEEDBACK_DUR
+                );
         }
 
         bool has_responded()
@@ -579,9 +512,12 @@ Page test_page {
         time tref;
         this.item = item;
 
-        tref = test_window1.show_test_page(this, reftime + INTER_TRIAL_INTERVAL);
+        tref = test_window1.show_test_page(
+                this,
+                reftime + INTER_TRIAL_INTERVAL
+                );
 
-        layout.enable_sentences(item.s1, item.s2, tref);
+        layout.enable_sentences(item.s1, tref);
 
         test_page_overlay.update_progress_bar(cycle);
 
@@ -611,7 +547,7 @@ Page test_page {
         layout.enable_pictures(item.fn1, item.fn2 , tref);
         
         response_pictures.clear();
-        response_pictures.start(tref);
+        response_pictures.start(tref, PICTURE_RESPONSE_DURATION);
         
         phase = PHASE_PICTURES;
         
