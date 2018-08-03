@@ -399,13 +399,14 @@ Page test_page {
 
     Response response_pictures
     {
-        int     rt_first;       // first reaction time
-        string  s1_resp_first;  // First response on the first sentence
+        int     rt;             // Reaction time
+        string  chosen;         // Whether the left "A" , the right "B"
+                                // or no "" picture was chosen.
 
         void clear()
         {
-            rt_first = -9999;
-            s1_resp_first = "";
+            rt      = -9999;
+            chosen  = "";
         }
 
         void process_hit(time t, int value)
@@ -430,8 +431,8 @@ Page test_page {
                         );
                 }
 
-                rt_first        = rt;
-                s1_resp_first   = ans1;
+                this.rt  = rt;
+                chosen = ans1;
 
                 ignore_remaining_hits();
 
@@ -439,8 +440,7 @@ Page test_page {
             }
             else if(
                 validity == HIT_IGNORED   ||
-                validity == HIT_TOO_EARLY ||
-                validity == HIT_IGNORED
+                validity == HIT_TOO_EARLY
                 ) // handle these when there is need for
             {
                 println("Invalid Hit " + validity);
@@ -451,7 +451,7 @@ Page test_page {
         on_event:finish()
         {
             layout.pictures.display_feedback(
-                s1_resp_first,
+                chosen,
                 event_time,
                 FEEDBACK_DUR
                 );
@@ -459,8 +459,7 @@ Page test_page {
 
         bool has_responded()
         {
-            // the first is to display the pictures
-            return rt_first >= 0;
+            return rt >= 0;
         }
     }
 

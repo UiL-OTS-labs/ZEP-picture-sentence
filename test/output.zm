@@ -1,29 +1,22 @@
 
-// The chosen interpretation
-enum inter_t {
-    INT_NL,
-    INT_ES,
-    INT_CORRECT,
-    INT_INCORRECT
-};
-
 
 // Describes the output of each trial in the experiment.
 record TestOutput {
-    int     id;                     // item id
-    item_type type;                 // the item type
-    int     reading_time;           // time to read sentences
-    string  fn1;                    // filename of first picture
-    string  fn2;                    // filename of 2nd picture
-    string  s1;                     // first sentence
-    int     s1_type;                // the type of the sentence 1
-    pic_t   s1_first_resp;          // value of the first response on sentence 1
-    inter_t s1_first_inter;         // value of the first interpretation 1
+    int         id;                 // item id
+    item_type   type;               // the item type
 
-    int     s1_first_resp_i;        // value of the first response on sentence 1
-    int     s1_first_inter_i;       // value of the first interpretation 1
+    int         reading_time;       // time to read the sentence
 
-    int     first_response_time;    // rt of the first response
+    string      fn1;                // file name of 1st picture (A)
+    string      fn2;                // file name of 2nd picture (B)
+    string      sentence;           // the sentence
+
+    sen_t       sen_type;           // the type of the sentence
+    pic_t       pic_resp;           // The chosen picture
+
+    int         response_value;     // value of the response given the
+                                    // sentence and chosen picture.
+    int         response_time;      // rt of the response
 };
 
 // Output of the practice phase

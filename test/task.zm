@@ -4,30 +4,19 @@ import output;
 import test_page;
 
 // Returns the interpretation of the participant
-inter_t interpretation(pic_t p, sen_t s)
+// or the discussed integer value that belongs to a given type of picture and
+// sentence.
+int interpretation(pic_t p, sen_t s)
 {
-    inter_t retval;
-    if (
-            (p == PIC_ALIENABLE && s == SEN_ARTICLE) ||
-            (p == PIC_NON_ALIENABLE && s == SEN_PRONOUN)
-        ) {
-        retval = INT_NL;
-    }
-    else if (
-            (p == PIC_NON_ALIENABLE && s == SEN_ARTICLE) ||
-            (p == PIC_ALIENABLE && s == SEN_PRONOUN)
-        ) {
-        retval = INT_ES;
-    }
-    else if (
-            (p == PIC_REFLEXIVE && s == SEN_REFLEXIVE) ||
-            (p == PIC_TRANSITIVE && s == SEN_TRANSITIVE)
-        ) {
-        retval = INT_CORRECT;
-    }
-    else {
-        retval = INT_INCORRECT;
-    }
+    int retval = -1;
+    if      (p == PIC_NON_ALIENABLE && s == SEN_ARTICLE)
+        retval = 1;
+    else if (p == PIC_ALIENABLE     && s == SEN_ARTICLE)
+        retval = 2;
+    else if (p == PIC_NON_ALIENABLE && s == SEN_PRONOUN)
+        retval = 3;
+    else if (p == PIC_ALIENABLE     && s == SEN_PRONOUN)
+        retval = 4;
 
     return retval;
 }
@@ -101,28 +90,30 @@ Block task
                 output.id       = item.id;
                 output.type     = item.type;
 
-                string s1resp1   = test_page.response_pictures.s1_resp_first;
+                // Whether the participant chose the left "A", right "B"
+                // picture or "" when no response was made in time .
+                string response = test_page.response_pictures.chosen;
 
                 output.reading_time = int(test_page.response_sentences.rt);
                 output.fn1          = item.fn1;
                 output.fn2          = item.fn2;
-                output.s1           = item.s1;
 
-                output.s1_type      = item.s1_type;
+                output.sentence     = item.s1;
+                output.sen_type     = item.s1_type;
 
-                output.s1_first_resp=
-                    s1resp1 == "A" ? item.picA_val : item.picB_val ;
+                if (response == "A")
+                    output.pic_resp = item.picA_val;
+                else if (response == "B")
+                    output.pic_resp = item.picB_val;
+                else 
+                    output.pic_resp = PIC_OMISSION;
 
-                output.s1_first_inter = interpretation(
-                        output.s1_first_resp,
-                        item.s1_type
+                output.response_value = interpretation(
+                        output.pic_resp,
+                        output.sen_type
                         );
 
-                output.s1_first_resp_i = output.s1_first_resp;
-                output.s1_first_inter_i = output.s1_first_inter;
-
-                output.first_response_time
-                                    = test_page.response_pictures.rt_first;
+                output.response_time = test_page.response_pictures.rt;
 
                 test_output_append(prac_output, output);
             }
@@ -214,28 +205,28 @@ Block task
                 output.id       = item.id;
                 output.type     = item.type;
 
-                string s1resp1   = test_page.response_pictures.s1_resp_first;
+                string response = test_page.response_pictures.chosen;
 
                 output.reading_time = int(test_page.response_sentences.rt);
                 output.fn1          = item.fn1;
                 output.fn2          = item.fn2;
-                output.s1           = item.s1;
 
-                output.s1_type      = item.s1_type;
+                output.sentence     = item.s1;
+                output.sen_type     = item.s1_type;
 
-                output.s1_first_resp=
-                    s1resp1 == "A" ? item.picA_val : item.picB_val ;
+                if (response == "A")
+                    output.pic_resp = item.picA_val;
+                else if (response == "B")
+                    output.pic_resp = item.picB_val;
+                else 
+                    output.pic_resp = PIC_OMISSION;
 
-                output.s1_first_inter = interpretation(
-                        output.s1_first_resp,
-                        item.s1_type
+                output.response_value = interpretation(
+                        output.pic_resp,
+                        output.sen_type
                         );
 
-                output.s1_first_resp_i = output.s1_first_resp;
-                output.s1_first_inter_i = output.s1_first_inter;
-
-                output.first_response_time
-                                    = test_page.response_pictures.rt_first;
+                output.response_time = test_page.response_pictures.rt;
 
                 test_output_append(test_output, output);
                 if (item.type == ITEM_TARGET) {
