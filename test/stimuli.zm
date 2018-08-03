@@ -5,7 +5,8 @@ enum pic_t {
     PIC_NON_ALIENABLE   = 2,
     PIC_REFLEXIVE       = 3,
     PIC_TRANSITIVE      = 4,
-    PIC_PRACTICE        = 5
+    PIC_PRACTICE        = 5,
+    PIC_OMISSION        = 6     // when no picture was chosen.
 };
 
 // sentence types used to log in output
