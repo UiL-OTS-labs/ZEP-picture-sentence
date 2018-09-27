@@ -17,6 +17,16 @@ int interpretation(pic_t p, sen_t s)
         retval = 3;
     else if (p == PIC_ALIENABLE     && s == SEN_PRONOUN)
         retval = 4;
+    else if (p == PIC_REFLEXIVE     && s == SEN_REFLEXIVE)
+        retval = 1;
+    else if (p == PIC_TRANSITIVE    && s == SEN_TRANSITIVE)
+        retval = 1;
+    else if (p == PIC_REFLEXIVE     && s == SEN_TRANSITIVE)
+        retval = 0;
+    else if (p == PIC_TRANSITIVE    && s == SEN_REFLEXIVE)
+        retval = 0;
+    else if (p == PIC_OMISSION)
+        retval = 2;
 
     return retval;
 }
